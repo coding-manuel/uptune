@@ -1,0 +1,37 @@
+{
+  "name": "uptune",
+  "private": true,
+  "version": "0.0.0",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "@mantine/core": "^4.2.4",
+    "@mantine/dates": "^4.2.4",
+    "@mantine/dropzone": "^4.2.4",
+    "@mantine/form": "^4.2.4",
+    "@mantine/hooks": "^4.2.4",
+    "@mantine/modals": "^4.2.4",
+    "@mantine/notifications": "^4.2.4",
+    "dayjs": "^1.11.2",
+    "phosphor-react": "^1.4.1",
+    "react": "^18.0.0",
+    "react-dom": "^18.0.0",
+    "react-router-dom": "^6.3.0",
+    "web3.storage": "^4.2.0"
+  },
+  "devDependencies": {
+    "@nomiclabs/hardhat-ethers": "^2.0.5",
+    "@nomiclabs/hardhat-waffle": "^2.0.3",
+    "@types/react": "^18.0.0",
+    "@types/react-dom": "^18.0.0",
+    "@vitejs/plugin-react": "^1.3.0",
+    "chai": "^4.3.6",
+    "ethereum-waffle": "^3.4.4",
+    "ethers": "^5.6.5",
+    "hardhat": "^2.9.3",
+    "vite": "^2.9.7"
+  }
+}
