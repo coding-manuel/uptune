@@ -13,6 +13,7 @@ contract Uptune {
     string coverart;
     string title;
     string[] tags;
+    string[] genres;
     address[] authors;
   }
 
@@ -22,10 +23,11 @@ contract Uptune {
     string coverart,
     string title,
     string[] tags,
+    string[] genres,
     address[] authors
   );
 
-  function uploadAudio(string memory _audiohash, string memory _coverart, string memory _title, string[] memory _tags, address[] memory _authors) public {
+  function uploadAudio(string memory _audiohash, string memory _coverart, string memory _title, string[] memory _tags, string[] memory _genres, address[] memory _authors) public {
     require(bytes(_audiohash).length > 0);
     require(bytes(_coverart).length > 0);
     require(bytes(_title).length > 0);
@@ -33,7 +35,7 @@ contract Uptune {
 
     audioCount ++;
 
-    audios[audioCount] = Audio(audioCount, _audiohash, _coverart, _title, _tags, _authors);
-    emit AudioUploaded(audioCount, _audiohash, _coverart, _title, _tags, _authors);
+    audios[audioCount] = Audio(audioCount, _audiohash, _coverart, _title, _tags, _genres, _authors);
+    emit AudioUploaded(audioCount, _audiohash, _coverart, _title, _tags, _genres, _authors);
   }
 }

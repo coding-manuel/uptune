@@ -5,7 +5,7 @@ import { NotificationsProvider } from '@mantine/notifications';
 import { BrowserRouter } from "react-router-dom";
 
 import App from './App'
-import { UptuneProvider } from './context/transactionsContext';
+import { UptuneProvider } from './context/UptuneContext';
 import { theme } from './theme';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
