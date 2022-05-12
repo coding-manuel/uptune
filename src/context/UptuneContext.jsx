@@ -25,7 +25,7 @@ export const UptuneProvider = ({children}) => {
     const [storage, setStorage] = useState('');
     const [loading, setLoading] = useState(false);
     const [loadingStatus, setLoadingStatus] = useState('');
-    const [transactions, setTransactions] = useState([]);
+    const [error, setError] = useState([]);
 
     const connectToIPFS = async () =>{
         const token = import.meta.env.VITE_WEB3API
@@ -43,7 +43,7 @@ export const UptuneProvider = ({children}) => {
             if(accounts.length){
                 setCurrentAccount(accounts[0])
             }else{
-                console.log('No Accounts Found')
+                setError([true, "Connect Wallet"])
             }
         } catch (error) {
             console.log(error)
@@ -54,11 +54,16 @@ export const UptuneProvider = ({children}) => {
 
     const getAllAudio = async () =>{
         try {
+            setLoading(true)
+
             const transactionContract = getEthereumContract()
             const all = await transactionContract.getAllAudio()
 
-            console.log(all)
+            setLoading(false)
+
+            return all;
         } catch (error) {
+            setLoading(false)
             console.log(error)
         }
     }
@@ -111,13 +116,16 @@ export const UptuneProvider = ({children}) => {
 
     const connectWallet = async () => {
         try {
+            setLoading(true)
             if(!ethereum) return alert("Please Install MetaMask")
 
             const accounts = await ethereum.request({method: "eth_requestAccounts"})
 
             setCurrentAccount(accounts[0])
 
+            setLoading(false)
         } catch (error) {
+            setLoading(false)
             console.log(error)
 
 
@@ -132,7 +140,7 @@ export const UptuneProvider = ({children}) => {
     }, [])
 
     return(
-        <UptuneContext.Provider value={{connectWallet, currentAccount, storage, uploadAudio, loading, loadingStatus, getAllAudio, getOneAudio}}>
+        <UptuneContext.Provider value={{connectWallet, currentAccount, storage, uploadAudio, loading, loadingStatus, getAllAudio, getOneAudio, error, setError}}>
             {children}
         </UptuneContext.Provider>
     )
