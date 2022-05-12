@@ -57,6 +57,7 @@ export const UptuneProvider = ({children}) => {
             const accounts = await ethereum.request({method: "eth_accounts"})
 
             if(accounts.length){
+                console.log(accounts)
                 setCurrentAccount(accounts[0])
 
                 // getAllTransactions()
@@ -73,6 +74,14 @@ export const UptuneProvider = ({children}) => {
     const uploadAudio = async (files) =>{
         try {
             if(!ethereum) return alert("Please Install MetaMask")
+            // art: File {path: 'Screenshot 2022-04-29 101029.jpg', name: 'Screenshot 2022-04-29 101029.jpg', lastModified: 1651207231323, lastModifiedDate: Fri Apr 29 2022 10:10:31 GMT+0530 (India Standard Time), webkitRelativePath: '', …}
+            // audio: File {path: 'Y2Mate.is - (FREE) Lo-fi Type Beat - Rain-pdYJtRBPlTw-128k-1645826259361.mp3', name: 'Y2Mate.is - (FREE) Lo-fi Type Beat - Rain-pdYJtRBPlTw-128k-1645826259361.mp3', lastModified: 1648666015752, lastModifiedDate: Thu Mar 31 2022 00:16:55 GMT+0530 (India Standard Time), webkitRelativePath: '', …}
+            // genres: ['Dubstep']
+            // mainArtist: "RawJaw"
+            // moods: (2) ['Happy', 'Energetic']
+            // supportArtist: "gautam "
+            // title: "chokemen returns"
+            // wallet: ""
 
             const transactionContract = getEthereumContract()
 
