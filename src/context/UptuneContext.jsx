@@ -1,6 +1,6 @@
 import React, {cloneElement, useEffect, useState} from "react"
-import {ethers } from 'ethers'
-import { Web3Storage, getFilesFromPath } from 'web3.storage'
+import { ethers } from 'ethers'
+import { Web3Storage } from 'web3.storage'
 
 import {contractABI, contractAddress } from "../utils/constants"
 
@@ -16,32 +16,16 @@ const getEthereumContract = () =>{
     return uptuneContract
 }
 
+function makeGatewayURL(cid, path) {
+    return `https://${cid}.ipfs.dweb.link/${encodeURIComponent(path)}`
+}
+
 export const UptuneProvider = ({children}) => {
     const [currentAccount, setCurrentAccount] = useState('')
     const [storage, setStorage] = useState('');
+    const [loading, setLoading] = useState(false);
+    const [loadingStatus, setLoadingStatus] = useState('');
     const [transactions, setTransactions] = useState([]);
-
-    // const getAllTransactions = async () =>{
-    //     try {
-    //         if(!ethereum) return alert("Please Install MetaMask")
-    //         const transactionContract = getEthereumContract()
-
-    //         const availibleTransactions = await transactionContract.getAllTransactions()
-
-    //         const structuredTransactions = availibleTransactions.map((transaction) =>({
-    //             addressTo: transaction.reciever,
-    //             addressFrom: transaction.sender,
-    //             timestamp: new Date(transaction.timestamp.toNumber() * 100).toLocaleString(),
-    //             message: transaction.message,
-    //             keyword: transaction.keyword,
-    //             amount: parseInt(transaction.amount._hex) / (10 ** 18)
-    //         }))
-
-    //         setTransactions(structuredTransactions)
-    //     }catch(error){
-    //         console.log(error)
-    //     }
-    // }
 
     const connectToIPFS = async () =>{
         const token = import.meta.env.VITE_WEB3API
@@ -57,10 +41,7 @@ export const UptuneProvider = ({children}) => {
             const accounts = await ethereum.request({method: "eth_accounts"})
 
             if(accounts.length){
-                console.log(accounts)
                 setCurrentAccount(accounts[0])
-
-                // getAllTransactions()
             }else{
                 console.log('No Accounts Found')
             }
@@ -71,27 +52,59 @@ export const UptuneProvider = ({children}) => {
         }
     }
 
+    const getAllAudio = async () =>{
+        try {
+            const transactionContract = getEthereumContract()
+            const all = await transactionContract.getAllAudio()
+
+            console.log(all)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const getOneAudio = async () =>{
+        try {
+            const transactionContract = getEthereumContract()
+            const all = await transactionContract.getOneAudio(1)
+
+            console.log(all)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
     const uploadAudio = async (files) =>{
         try {
+            setLoading(true)
+
             if(!ethereum) return alert("Please Install MetaMask")
-            // art: File {path: 'Screenshot 2022-04-29 101029.jpg', name: 'Screenshot 2022-04-29 101029.jpg', lastModified: 1651207231323, lastModifiedDate: Fri Apr 29 2022 10:10:31 GMT+0530 (India Standard Time), webkitRelativePath: '', …}
-            // audio: File {path: 'Y2Mate.is - (FREE) Lo-fi Type Beat - Rain-pdYJtRBPlTw-128k-1645826259361.mp3', name: 'Y2Mate.is - (FREE) Lo-fi Type Beat - Rain-pdYJtRBPlTw-128k-1645826259361.mp3', lastModified: 1648666015752, lastModifiedDate: Thu Mar 31 2022 00:16:55 GMT+0530 (India Standard Time), webkitRelativePath: '', …}
-            // genres: ['Dubstep']
-            // mainArtist: "RawJaw"
-            // moods: (2) ['Happy', 'Energetic']
-            // supportArtist: "gautam "
-            // title: "chokemen returns"
-            // wallet: ""
 
+            //*upload to ipfs
+            setLoadingStatus("Uploading Audio to IPFS")
+            const audiohash = await storage.put(files.audio, {
+                name: files.mainArtist.concat('-', files.title)
+            })
+            setLoadingStatus("Uploading Cover Art to IPFS")
+            const coverarthash = await storage.put(files.art, {
+                name: files.mainArtist.concat('-', files.title, '|coverart')
+            })
+            const audioGateway = makeGatewayURL(audiohash, files.audio.name)
+            const coverartGateway = makeGatewayURL(coverarthash, files.art.name)
+
+            //*send to blockchain
+            setLoadingStatus("Uploading to the Blockchain")
             const transactionContract = getEthereumContract()
+            const transactionHash = await transactionContract.uploadAudio(audioGateway, coverartGateway, files.mainArtist, files.title, files.moods, files.genres, files.supportArtist)
 
+            setLoadingStatus("Waiting to confirm Transaction")
+            const transactionReceipt = await transactionHash.wait();
 
-            const cid = await storage.put(files)
-            console.log(cid)
+            setLoadingStatus(1)
 
-            //add to blockchain
-
+            setLoading(false)
         } catch (error) {
+            setLoading(false)
             console.log(error)
         }
     }
@@ -119,7 +132,7 @@ export const UptuneProvider = ({children}) => {
     }, [])
 
     return(
-        <UptuneContext.Provider value={{connectWallet, currentAccount, storage, uploadAudio}}>
+        <UptuneContext.Provider value={{connectWallet, currentAccount, storage, uploadAudio, loading, loadingStatus, getAllAudio, getOneAudio}}>
             {children}
         </UptuneContext.Provider>
     )

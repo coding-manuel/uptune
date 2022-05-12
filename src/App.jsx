@@ -3,6 +3,7 @@ import Upload from './pages/Upload';
 import Layout from './layout';
 
 import { changeFavicon } from './utils/faviconChange';
+import Home from './pages/Home';
 
 function App() {
   setInterval(() => {
@@ -12,6 +13,7 @@ function App() {
   return (
     <Layout>
       <Routes>
+        <Route path='home' element={<Home />} />
         <Route path='upload' element={<Upload />} />
       </Routes>
     </Layout>

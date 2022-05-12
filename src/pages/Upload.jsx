@@ -1,12 +1,13 @@
 import { useRef, useState, useContext, useEffect } from 'react'
-import { Button, Chips, Chip, TextInput, Group, Stack, Text, MediaQuery, MultiSelect} from '@mantine/core';
-import { Dropzone  } from '@mantine/dropzone';
-import { showNotification } from '@mantine/notifications';
-import { Camera } from "phosphor-react";
-import { useForm } from '@mantine/form';
+import { Button, Chips, Chip, TextInput, Group, Stack, Text, MediaQuery, MultiSelect} from '@mantine/core'
+import { Dropzone  } from '@mantine/dropzone'
+import { showNotification } from '@mantine/notifications'
+import { Camera } from "phosphor-react"
+import { useNavigate } from 'react-router-dom'
+import { useForm } from '@mantine/form'
 
 import logo from "../assets/Symbol_White.svg"
-import { UptuneContext } from '../context/UptuneContext';
+import { UptuneContext } from '../context/UptuneContext'
 
 export const coverArtChildren = (file) => (
     <Group position="center" spacing="sm" style={{ height: 200, width: 200, pointerEvents: 'none' }}>
@@ -19,7 +20,7 @@ export const coverArtChildren = (file) => (
         </>
         }
     </Group>
-);
+)
 
 export const audioChildren = (file) => (
     <Group position="center" spacing="sm" style={{ height: 50, pointerEvents: 'none' }}>
@@ -30,17 +31,19 @@ export const audioChildren = (file) => (
         </Text>
         }
     </Group>
-);
+)
 
 const moods = ['Happy', 'Exuberant', 'Energetic', 'Frantic', 'Sad', 'Calm', 'Content']
 const genresList = ['Rock', 'Jazz', 'Dubstep', 'Techno', 'Pop', 'Classical']
 
 export default function Upload() {
-    const {uploadAudio, currentAccount} = useContext(UptuneContext);
-    const [tags, setTags] = useState([]);
-    const [genres, setGenres] = useState([]);
-    const [audioAccepted, setAudioAccepted] = useState(false);
-    const [artAccepted, setArtAccepted] = useState(false);
+    const {uploadAudio, currentAccount, loading, loadingStatus, getAllAudio, getOneAudio} = useContext(UptuneContext)
+    const [tags, setTags] = useState([])
+    const [genres, setGenres] = useState([])
+    const [audioAccepted, setAudioAccepted] = useState(false)
+    const [artAccepted, setArtAccepted] = useState(false)
+
+    const navigate = useNavigate()
 
     const form = useForm({
         initialValues: {
@@ -56,7 +59,7 @@ export default function Upload() {
             mainArtist: (value) => value.length > 2 ? null : 'Enter Valid Artist Name',
             title: (value) => value.length > 2 ? null : 'Enter Valid Song Title',
         },
-      });
+      })
 
     const handleTags = (event, limit) =>{
         const value = event.target.value
@@ -90,12 +93,12 @@ export default function Upload() {
             setAudioAccepted(files)
         }
         else if (type === 'image'){
-            var reader  = new FileReader();
+            var reader  = new FileReader()
             reader.onload = (e) =>{
                 console.log(files, e.target.result)
                 setArtAccepted([files, e.target.result])
             }
-            reader.readAsDataURL(files[0]);
+            reader.readAsDataURL(files[0])
         }
     }
 
@@ -140,10 +143,16 @@ export default function Upload() {
         }
         values.genres = genres
         values.moods = tags
-        values.audio = audioAccepted[0]
-        values.art = artAccepted[0][0]
+        values.audio = audioAccepted
+        values.art = artAccepted[0]
         uploadAudio(values)
     }
+
+    useEffect(()=>{
+        if(loadingStatus === 1){
+            navigate("/home", {replace: true})
+        }
+    },[loadingStatus])
 
     return (
       <Stack>
@@ -222,11 +231,12 @@ export default function Upload() {
                             clearable
                             getCreateLabel={(query) => `+ Create ${query}`}
                         />
-                        <Button type='submit'>Upload</Button>
+                        <Button loading={loading} type='submit'>Upload</Button>
+                        {loading && <Text size='sm'>{loadingStatus}</Text>}
                     </Stack>
                 </form>
             </Group>
         </MediaQuery>
       </Stack>
-    );
+    )
 }
