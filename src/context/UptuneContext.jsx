@@ -57,11 +57,22 @@ export const UptuneProvider = ({children}) => {
             setLoading(true)
 
             const transactionContract = getEthereumContract()
-            const all = await transactionContract.getAllAudio()
+            const AllAudio = await transactionContract.getAllAudio()
+
+            const structuredAudio = AllAudio.map((audio) =>({
+                wallet: audio.wallet,
+                mainArtist: audio.mainAuthor,
+                supportArtist: audio.authors,
+                title: audio.title,
+                moods: audio.tags,
+                genres: audio.genres,
+                coverartgateway: audio.coverartgateway,
+                audiogateway: audio.audiogateway
+            }))
 
             setLoading(false)
 
-            return all;
+            return structuredAudio;
         } catch (error) {
             setLoading(false)
             console.log(error)
@@ -94,8 +105,8 @@ export const UptuneProvider = ({children}) => {
             const coverarthash = await storage.put(files.art, {
                 name: files.mainArtist.concat('-', files.title, '|coverart')
             })
-            const audioGateway = makeGatewayURL(audiohash, files.audio.name)
-            const coverartGateway = makeGatewayURL(coverarthash, files.art.name)
+            const audioGateway = makeGatewayURL(audiohash, files.audio[0].path)
+            const coverartGateway = makeGatewayURL(coverarthash, files.art[0].path)
 
             //*send to blockchain
             setLoadingStatus("Uploading to the Blockchain")

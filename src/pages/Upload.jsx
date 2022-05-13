@@ -78,7 +78,6 @@ export default function Upload() {
 
     const handleGenres = (value, limit) =>{
         if (value.length > limit) {
-            console.log('in')
             const genre = value
             genre.splice(1,1)
             setGenres([...genre])
@@ -95,7 +94,6 @@ export default function Upload() {
         else if (type === 'image'){
             var reader  = new FileReader()
             reader.onload = (e) =>{
-                console.log(files, e.target.result)
                 setArtAccepted([files, e.target.result])
             }
             reader.readAsDataURL(files[0])
