@@ -1,6 +1,7 @@
-import React, {cloneElement, useEffect, useState} from "react"
+import React, {useEffect, useState} from "react"
 import { ethers } from 'ethers'
 import { Web3Storage } from 'web3.storage'
+import { useLocation } from 'react-router-dom';
 
 import {contractABI, contractAddress } from "../utils/constants"
 
@@ -26,6 +27,9 @@ export const UptuneProvider = ({children}) => {
     const [loading, setLoading] = useState(false);
     const [loadingStatus, setLoadingStatus] = useState('');
     const [error, setError] = useState([]);
+    const [upload, setUpload] = useState(false);
+
+    const location = useLocation();
 
     const connectToIPFS = async () =>{
         const token = import.meta.env.VITE_WEB3API
@@ -144,14 +148,22 @@ export const UptuneProvider = ({children}) => {
         }
     }
 
+    const checkIfUpload = () => {
+        if(location.pathname === '/upload')
+            setUpload(true)
+        else
+            setUpload(false)
+    }
+
     useEffect(() =>{
+        checkIfUpload()
         connectToIPFS()
         checkIfWalletIsConnected()
 
     }, [])
 
     return(
-        <UptuneContext.Provider value={{connectWallet, currentAccount, storage, uploadAudio, loading, loadingStatus, getAllAudio, getOneAudio, error, setError}}>
+        <UptuneContext.Provider value={{checkIfUpload, upload, connectWallet, currentAccount, storage, uploadAudio, loading, loadingStatus, getAllAudio, getOneAudio, error, setError}}>
             {children}
         </UptuneContext.Provider>
     )

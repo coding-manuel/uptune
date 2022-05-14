@@ -9,15 +9,13 @@ import { UptuneProvider } from './context/UptuneContext';
 import { theme } from './theme';
 
 ReactDOM.createRoot(document.getElementById('root')).render(
-  <UptuneProvider>
-    <React.StrictMode>
+  <BrowserRouter>
+    <UptuneProvider>
       <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
         <NotificationsProvider>
-            <BrowserRouter>
-                <App />
-            </BrowserRouter>
-          </NotificationsProvider>
+          <App />
+        </NotificationsProvider>
       </MantineProvider>
-    </React.StrictMode>
-  </UptuneProvider>
+    </UptuneProvider>
+  </BrowserRouter>
 )

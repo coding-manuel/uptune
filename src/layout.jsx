@@ -1,4 +1,4 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import {
   AppShell,
   Container,
@@ -10,13 +10,20 @@ import {
 } from '@mantine/core';
 
 import Navbar from './components/Navbar';
-import FooterComp from './components/Footer';
+import Player from './components/Player'
 import { UptuneContext } from './context/UptuneContext';
+import { useLocation } from 'react-router-dom';
 
 export default function Layout({ children }) {
-  const {currentAccount, loading, connectWallet} = useContext(UptuneContext);
+  const {checkIfUpload, upload, currentAccount, loading, connectWallet} = useContext(UptuneContext);
+  const location = useLocation()
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
+
+
+  useEffect(() => {
+    checkIfUpload()
+  }, [location.pathname]);
 
   return (
     <AppShell
@@ -27,7 +34,7 @@ export default function Layout({ children }) {
         },
       }}
       fixed
-      footer={<FooterComp />}
+      footer={!upload && <Player />}
       header={<Navbar links={[{label: "Home", link:"home"}, {label: "Explore", link:"Explore"}]} />}
     >
         <Container size='lg'>
@@ -48,7 +55,7 @@ export default function Layout({ children }) {
             </Stack>
           </Modal>
           :
-          children
+            children
           }
         </Container>
     </AppShell>

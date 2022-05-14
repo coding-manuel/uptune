@@ -30,6 +30,7 @@ export default function Home() {
     <>
       <LoadingOverlay visible={loading} />
       <Swiper
+        style={{zIndex: 0}}
         modules={[Navigation]}
         rewind
         navigation={{
