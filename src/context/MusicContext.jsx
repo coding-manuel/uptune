@@ -3,14 +3,12 @@ import React, {useEffect, useState} from "react"
 export const MusicContext = React.createContext()
 
 export const MusicProvider = ({children}) => {
+    const [songData, setSongData] = useState([]);
 
 
-    useEffect(() =>{
-
-    }, [])
 
     return(
-        <MusicContext.Provider value={{}}>
+        <MusicContext.Provider value={{songData, setSongData}}>
             {children}
         </MusicContext.Provider>
     )

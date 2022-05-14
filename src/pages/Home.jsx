@@ -3,8 +3,9 @@ import { LoadingOverlay, Text, Group, ActionIcon } from '@mantine/core';
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 import { CaretRight, CaretLeft } from "phosphor-react"
 import { Navigation } from 'swiper';
-import { UptuneContext } from '../context/UptuneContext'
 import { showNotification } from '@mantine/notifications';
+
+import { UptuneContext } from '../context/UptuneContext'
 import SongThumb from '../components/SongThumb';
 
 import 'swiper/css';
