@@ -31,7 +31,7 @@ const Playing = ({songInfo, matches}) => {
 }
 
 export default function Player() {
-  const {songData} = useContext(MusicContext);
+  const {songData, setModalOpen} = useContext(MusicContext);
   const matches = useMediaQuery('(max-width: 600px)');
   const [songInfo, setSongInfo] = useState([]);
 
@@ -54,7 +54,7 @@ export default function Player() {
               RHAP_UI.MAIN_CONTROLS,
               <Playing matches={matches} songInfo={songInfo} />,
               !matches && RHAP_UI.VOLUME_CONTROLS,
-              <Box sx={{flex: matches && '1 0 auto', marginLeft: !matches && '16px', justifyContent: 'flex-end', display: 'flex'}}><ActionIcon p={4} sx={{width: "initial", height: "initial"}}><CurrencyEth size={24} weight="fill" /></ActionIcon></Box>,
+              <Box onClick={() => setModalOpen(true)} sx={{flex: matches && '1 0 auto', marginLeft: !matches && '16px', justifyContent: 'flex-end', display: 'flex'}}><ActionIcon p={4} sx={{width: "initial", height: "initial"}}><CurrencyEth size={24} weight="fill" /></ActionIcon></Box>,
             ]
           }
           showSkipControls={true}

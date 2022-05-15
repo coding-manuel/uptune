@@ -1,5 +1,5 @@
 import React, {useEffect, useState} from "react"
-import { ethers } from 'ethers'
+import { BigNumber, ethers } from 'ethers'
 import { Web3Storage } from 'web3.storage'
 import { useLocation } from 'react-router-dom';
 
@@ -25,6 +25,7 @@ export const UptuneProvider = ({children}) => {
     const [currentAccount, setCurrentAccount] = useState('')
     const [storage, setStorage] = useState('');
     const [loading, setLoading] = useState(false);
+    const [tipLoading, setTipLoading] = useState(false);
     const [loadingStatus, setLoadingStatus] = useState('');
     const [error, setError] = useState([]);
     const [upload, setUpload] = useState(false);
@@ -63,9 +64,10 @@ export const UptuneProvider = ({children}) => {
             const transactionContract = getEthereumContract()
             const AllAudio = await transactionContract.getAllAudio()
 
-            console.log(AllAudio)
-
             const structuredAudio = AllAudio.map((audio) =>({
+                id: Number(audio.id),
+                amount: ethers.utils.formatEther(audio.amount),
+                timestamp: new Date(audio.timestamp.toNumber() * 100).toLocaleString(),
                 wallet: audio.wallet,
                 mainArtist: audio.mainAuthor,
                 supportArtist: audio.authors,
@@ -135,32 +137,31 @@ export const UptuneProvider = ({children}) => {
         try {
             if(!ethereum) return alert("Please Install MetaMask")
 
-            setLoading(true)
+            setTipLoading(true)
 
-            const {id, amount, address} = values
+            const {id, tip, wallet} = values
 
             const transactionContract = getEthereumContract()
-            const parsedAmount = ethers.utils.parseEther(amount.toString())
+            let parsedAmount = ethers.utils.parseEther(tip.toString())
 
             await ethereum.request({
                 method: 'eth_sendTransaction',
                 params: [{
                     from: currentAccount,
-                    to: address,
+                    to: wallet,
                     gas: '0x5208',
                     value: parsedAmount._hex,
                 }]
             })
 
             const transactionHash = await transactionContract.sendTip(id, parsedAmount)
+            const transactionReceipt = await transactionHash.wait();
 
-            console.log("hash", transactionHash)
-
-            setLoading(false)
+            setTipLoading(1)
         } catch (error) {
             console.log(error)
 
-            setLoading(false)
+            setTipLoading(false)
             throw new Error("No Ethereum Object")
         }
     }
@@ -199,7 +200,7 @@ export const UptuneProvider = ({children}) => {
     }, [])
 
     return(
-        <UptuneContext.Provider value={{checkIfUpload, upload, connectWallet, currentAccount, storage, uploadAudio, loading, loadingStatus, getAllAudio, getOneAudio, error, setError, sendTip}}>
+        <UptuneContext.Provider value={{checkIfUpload, upload, connectWallet, currentAccount, storage, uploadAudio, loading, loadingStatus, getAllAudio, getOneAudio, error, setError, sendTip, tipLoading}}>
             {children}
         </UptuneContext.Provider>
     )

@@ -6,6 +6,7 @@ import { Navigation } from 'swiper';
 import { showNotification } from '@mantine/notifications';
 
 import { UptuneContext } from '../context/UptuneContext'
+import TipModal from '../components/TipModal';
 import SongThumb from '../components/SongThumb';
 
 import 'swiper/css';
@@ -13,6 +14,7 @@ import 'swiper/css/navigation';
 
 export default function Home() {
   const {getAllAudio, loading} = useContext(UptuneContext);
+
   const [songs, setSongs] = useState([]);
 
   const nextEl = useRef(null)
@@ -26,9 +28,11 @@ export default function Home() {
     fetchSongs()
   }, [])
 
+
   return (
     <>
       <LoadingOverlay visible={loading} />
+      <TipModal />
       <Swiper
         style={{zIndex: 0}}
         modules={[Navigation]}
