@@ -1,14 +1,14 @@
 // SPDX-License-Identifier: UNLICENSED
-
 pragma solidity ^0.8.0;
 
 contract Uptune {
   uint public audioCount = 0;
-  string public name = "Uptune";
   mapping(uint => Audio) public audios;
 
   struct Audio {
     uint id;
+    uint amount;
+    uint256 timestamp;
     address wallet;
     string audiogateway;
     string coverartgateway;
@@ -21,6 +21,8 @@ contract Uptune {
 
   event AudioUploaded(
     uint id,
+    uint amount,
+    uint256 timestamp,
     address wallet,
     string audiogateway,
     string coverartgateway,
@@ -39,8 +41,8 @@ contract Uptune {
 
     audioCount ++;
 
-    audios[audioCount] = Audio(audioCount, msg.sender, _audiogateway, _coverartgateway, _mainAuthor, _title, _tags, _genres, _authors);
-    emit AudioUploaded(audioCount, msg.sender, _audiogateway, _coverartgateway, _mainAuthor, _title, _tags, _genres, _authors);
+    audios[audioCount] = Audio(audioCount, 0, block.timestamp , msg.sender, _audiogateway, _coverartgateway, _mainAuthor, _title, _tags, _genres, _authors);
+    emit AudioUploaded(audioCount, 0, block.timestamp, msg.sender, _audiogateway, _coverartgateway, _mainAuthor, _title, _tags, _genres, _authors);
   }
 
   function getAllAudio() public view returns (Audio[] memory){
@@ -53,5 +55,9 @@ contract Uptune {
 
   function getOneAudio(uint _audioCount) public view returns(Audio memory) {
     return audios[_audioCount];
+  }
+
+  function sendTip(uint _audioCount, uint _amount) public {
+    audios[_audioCount].amount += _amount;
   }
 }
