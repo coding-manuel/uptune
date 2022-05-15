@@ -4,7 +4,7 @@
 }
 
 .rhap_progress-container{
-    margin: 0;
+    margin: 0 16px;
 }
 
 .rhap_main-controls-button svg {
@@ -35,6 +35,7 @@
 }
 
 .rhap_stacked .rhap_controls-section{
+    justify-content: initial;
     margin: 12px 0;
 }
 
@@ -42,10 +43,6 @@
     color: #A6A7AB;
     font-size: 14px;
     padding: 0 2px;
-}
-
-#rhap_current-time {
-    margin-left: 12px;
 }
 
 .rhap_play-pause-button{

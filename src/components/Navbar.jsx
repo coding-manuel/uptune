@@ -1,5 +1,5 @@
 import React, { useState, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 import { createStyles, Header, ActionIcon, Container, Group, Burger, Paper, Transition, Button, Text } from '@mantine/core';
 import { useBooleanToggle } from '@mantine/hooks';
 import { UptuneContext } from '../context/UptuneContext'
@@ -87,6 +87,7 @@ export default function Navbar({ links }) {
   const [opened, toggleOpened] = useBooleanToggle(false);
   const [active, setActive] = useState(links[0].link);
   const { classes, cx } = useStyles();
+  const navigate = useNavigate()
 
   const items = links.map((link) => (
     <Link
@@ -123,10 +124,14 @@ export default function Navbar({ links }) {
     }
   }
 
+  const handleLogoClick = () => {
+    navigate("/home")
+  }
+
   return (
     <Header height={HEADER_HEIGHT} className={classes.root}>
       <Container size='lg' className={classes.header}>
-        <img style={{height: 30}} src={Logo} alt="" />
+        <img onClick={handleLogoClick} style={{height: 30, cursor: "pointer"}} src={Logo} alt="" />
         <Group spacing={24}>
           <Group spacing={5} className={classes.links}>
             {items}

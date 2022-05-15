@@ -4,7 +4,7 @@ const main = async () => {
 
   await uptune.deployed();
 
-  console.log("Uptune deployed to:", uptune.address);
+  console.log("uptune deployed to:", uptune.address);
 }
 
 const runMain = async () => {

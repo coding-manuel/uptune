@@ -63,6 +63,8 @@ export const UptuneProvider = ({children}) => {
             const transactionContract = getEthereumContract()
             const AllAudio = await transactionContract.getAllAudio()
 
+            console.log(AllAudio)
+
             const structuredAudio = AllAudio.map((audio) =>({
                 wallet: audio.wallet,
                 mainArtist: audio.mainAuthor,
@@ -129,6 +131,40 @@ export const UptuneProvider = ({children}) => {
         }
     }
 
+    const sendTip = async (values) => {
+        try {
+            if(!ethereum) return alert("Please Install MetaMask")
+
+            setLoading(true)
+
+            const {id, amount, address} = values
+
+            const transactionContract = getEthereumContract()
+            const parsedAmount = ethers.utils.parseEther(amount.toString())
+
+            await ethereum.request({
+                method: 'eth_sendTransaction',
+                params: [{
+                    from: currentAccount,
+                    to: address,
+                    gas: '0x5208',
+                    value: parsedAmount._hex,
+                }]
+            })
+
+            const transactionHash = await transactionContract.sendTip(id, parsedAmount)
+
+            console.log("hash", transactionHash)
+
+            setLoading(false)
+        } catch (error) {
+            console.log(error)
+
+            setLoading(false)
+            throw new Error("No Ethereum Object")
+        }
+    }
+
     const connectWallet = async () => {
         try {
             setLoading(true)
@@ -163,7 +199,7 @@ export const UptuneProvider = ({children}) => {
     }, [])
 
     return(
-        <UptuneContext.Provider value={{checkIfUpload, upload, connectWallet, currentAccount, storage, uploadAudio, loading, loadingStatus, getAllAudio, getOneAudio, error, setError}}>
+        <UptuneContext.Provider value={{checkIfUpload, upload, connectWallet, currentAccount, storage, uploadAudio, loading, loadingStatus, getAllAudio, getOneAudio, error, setError, sendTip}}>
             {children}
         </UptuneContext.Provider>
     )

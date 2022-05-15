@@ -21,7 +21,6 @@ export default function Home() {
   useEffect(()=>{
     async function fetchSongs() {
       let response = await getAllAudio()
-      console.log(response)
       setSongs(response)
     }
     fetchSongs()
@@ -68,8 +67,6 @@ export default function Home() {
             slidesPerView: 7,
           }
         }}
-        onSlideChange={() => console.log('slide change')}
-        onSwiper={(swiper) => console.log(swiper)}
       >
         {!songs == [] && songs.map((song) =>{
           return <SwiperSlide><SongThumb song={song} /></SwiperSlide>
