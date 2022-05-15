@@ -4,6 +4,14 @@ pragma solidity ^0.8.0;
 contract Uptune {
   uint public audioCount = 0;
   mapping(uint => Audio) public audios;
+  mapping(uint => Comment) public comments;
+
+  struct Comment {
+    uint id;
+    string[] comment;
+    uint[] amount;
+    uint256[] timestamp;
+  }
 
   struct Audio {
     uint id;
@@ -57,7 +65,16 @@ contract Uptune {
     return audios[_audioCount];
   }
 
-  function sendTip(uint _audioCount, uint _amount) public {
-    audios[_audioCount].amount += _amount;
+  function getAllComments(uint _id) public view returns(Comment memory) {
+    return comments[_id];
+  }
+
+  function sendTip(uint _id, uint _amount, string memory _message) public{
+    audios[_id].amount += _amount;
+
+    comments[_id].comment.push(_message);
+    comments[_id].amount.push(_amount);
+    comments[_id].timestamp.push(block.timestamp);
+
   }
 }

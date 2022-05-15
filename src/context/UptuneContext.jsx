@@ -64,6 +64,8 @@ export const UptuneProvider = ({children}) => {
             const transactionContract = getEthereumContract()
             const AllAudio = await transactionContract.getAllAudio()
 
+            console.log(AllAudio)
+
             const structuredAudio = AllAudio.map((audio) =>({
                 id: Number(audio.id),
                 amount: ethers.utils.formatEther(audio.amount),
@@ -75,7 +77,8 @@ export const UptuneProvider = ({children}) => {
                 moods: audio.tags,
                 genres: audio.genres,
                 coverartgateway: audio.coverartgateway,
-                audiogateway: audio.audiogateway
+                audiogateway: audio.audiogateway,
+                comments: audio.comments
             }))
 
             setLoading(false)
@@ -119,7 +122,7 @@ export const UptuneProvider = ({children}) => {
             //*send to blockchain
             setLoadingStatus("Uploading to the Blockchain")
             const transactionContract = getEthereumContract()
-            const transactionHash = await transactionContract.uploadAudio(audioGateway, coverartGateway, files.mainArtist, files.title, files.moods, files.genres, files.supportArtist)
+            const transactionHash = await transactionContract.uploadAudio(audioGateway, coverartGateway, files.mainArtist, files.title, files.moods, files.genres, files.supportArtist, [])
 
             setLoadingStatus("Waiting to confirm Transaction")
             const transactionReceipt = await transactionHash.wait();
@@ -139,7 +142,7 @@ export const UptuneProvider = ({children}) => {
 
             setTipLoading(true)
 
-            const {id, tip, wallet} = values
+            const {id, tip, wallet, message} = values
 
             const transactionContract = getEthereumContract()
             let parsedAmount = ethers.utils.parseEther(tip.toString())
@@ -154,9 +157,9 @@ export const UptuneProvider = ({children}) => {
                 }]
             })
 
-            const transactionHash = await transactionContract.sendTip(id, parsedAmount)
+            console.log(transactionContract)
+            const transactionHash = await transactionContract.sendTip(id, parsedAmount, message)
             const transactionReceipt = await transactionHash.wait();
-
             setTipLoading(1)
         } catch (error) {
             console.log(error)
@@ -200,7 +203,7 @@ export const UptuneProvider = ({children}) => {
     }, [])
 
     return(
-        <UptuneContext.Provider value={{checkIfUpload, upload, connectWallet, currentAccount, storage, uploadAudio, loading, loadingStatus, getAllAudio, getOneAudio, error, setError, sendTip, tipLoading}}>
+        <UptuneContext.Provider value={{checkIfUpload, upload, connectWallet, currentAccount, storage, uploadAudio, loading, loadingStatus, getAllAudio, getOneAudio, error, setError, sendTip, tipLoading, setTipLoading}}>
             {children}
         </UptuneContext.Provider>
     )
