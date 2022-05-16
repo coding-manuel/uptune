@@ -95,6 +95,8 @@ export const UptuneProvider = ({children}) => {
             const transactionContract = getEthereumContract()
             const AllAudio = await transactionContract.getAllAudio()
 
+            console.log(AllAudio)
+
             const structuredAudio = AllAudio.map((audio) =>({
                 id: Number(audio.id),
                 amount: ethers.utils.formatEther(audio.amount),

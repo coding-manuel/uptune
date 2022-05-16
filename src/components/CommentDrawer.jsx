@@ -1,6 +1,6 @@
 import React,{useEffect, useContext, useState} from 'react'
 import { MusicContext } from '../context/MusicContext';
-import { Drawer, Group, Text, Stack, Box, Paper } from '@mantine/core';
+import { Drawer, Group, Text, Stack, Box, Paper, Button } from '@mantine/core';
 import { CurrencyEth } from 'phosphor-react';
 import { UptuneContext } from '../context/UptuneContext';
 import ReactTimeAgo from 'react-time-ago'
@@ -22,10 +22,15 @@ const Comment = ({commentData}) => {
 )}
 
 export default function CommentDrawer({songData}) {
-    const {commentDrawer, setCommentDrawer} = useContext(MusicContext);
+    const {commentDrawer, setCommentDrawer, setModalOpen} = useContext(MusicContext);
     const {getAllComments} = useContext(UptuneContext)
 
     const [comments, setComments] = useState([]);
+
+    const handleClick = () => {
+        setCommentDrawer(false)
+        setModalOpen(true)
+    }
 
     useEffect(()=>{
         async function fetchComments() {
@@ -46,9 +51,13 @@ export default function CommentDrawer({songData}) {
         overlayOpacity={0.55}
         overlayBlur={3}
         >
-        {comments.length !=0 && comments.map((c) =>{
+        {comments.length !=0 ? comments.map((c) =>{
             return <Comment commentData={c} />
-        })}
+        }) :
+        <Stack>
+            <Text>No Comments Yet</Text>
+            <Button onClick={handleClick}>Be the First one to comment</Button>
+        </Stack>}
         </Drawer>
     )
 }

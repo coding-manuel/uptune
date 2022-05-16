@@ -1,6 +1,6 @@
-import React, {useContext, useState, useEffect} from 'react'
+import React, {useContext, useState, useEffect, useRef} from 'react'
 import { Stack, Modal, Text, Image, NumberInput, Button, Group, LoadingOverlay, TextInput } from '@mantine/core';
-import { PaperPlaneRight, Check } from 'phosphor-react';
+import { PaperPlaneRight, Check, CurrencyEth } from 'phosphor-react';
 import { useForm } from '@mantine/form'
 import { MusicContext } from '../context/MusicContext';
 import { UptuneContext } from '../context/UptuneContext';
@@ -9,9 +9,12 @@ export default function TipModal() {
     const {songData, modalOpen, setModalOpen} = useContext(MusicContext);
     const {sendTip, tipLoading, setTipLoading} = useContext(UptuneContext)
 
+    const ref = useRef(null)
+
     const [loaded, setLoaded] = useState(false);
     const [open, setOpen] = useState(false);
     const [song, setSong] = useState(false);
+    const [value, setValue] = useState(0);
 
     const form = useForm({
         initialValues: {
@@ -30,6 +33,13 @@ export default function TipModal() {
 
     const handleSubmit = (values) => {
         sendTip({id: songData.id, tip: values.tip, wallet: songData.wallet, message: values.message})
+    }
+
+    const addTip = (val) => {
+        console.log(value, val)
+        setValue((parseFloat(value) + val).toPrecision(4).toString())
+        console.log(ref.current.value)
+        ref.current.value = value
     }
 
     useEffect(() => {
@@ -76,11 +86,13 @@ export default function TipModal() {
                                 required
                                 hideControls
                                 min={0}
-                                precision={3}
+                                precision={4}
+                                icon={<CurrencyEth size={16} />}
                                 {...form.getInputProps('tip')}
                             />
                             <Button loading={tipLoading} type='submit'>Send<PaperPlaneRight style={{paddingLeft: 4}} size={20} weight="fill" /></Button>
                         </Group>
+
                     </Stack>
                     }
                 </Stack>

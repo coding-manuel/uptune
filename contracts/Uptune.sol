@@ -49,8 +49,8 @@ contract Uptune {
 
     audioCount ++;
 
-    audios[audioCount] = Audio(audioCount, 0, block.timestamp , msg.sender, _audiogateway, _coverartgateway, _mainAuthor, _title, _tags, _genres, _authors);
-    emit AudioUploaded(audioCount, 0, block.timestamp, msg.sender, _audiogateway, _coverartgateway, _mainAuthor, _title, _tags, _genres, _authors);
+    audios[audioCount] = Audio(audioCount, 0, block.timestamp , msg.sender, _audiogateway, _coverartgateway, _title, _mainAuthor, _tags, _genres, _authors);
+    emit AudioUploaded(audioCount, 0, block.timestamp, msg.sender, _audiogateway, _coverartgateway, _title, _mainAuthor, _tags, _genres, _authors);
   }
 
   function getAllAudio() public view returns (Audio[] memory){
