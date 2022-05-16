@@ -35,7 +35,7 @@ export default function Layout({ children }) {
       }}
       fixed
       footer={!upload && <Player />}
-      header={<Navbar links={[{label: "Home", link:"home"}, {label: "Explore", link:"Explore"}]} />}
+      header={<Navbar />}
     >
         <Container size='lg'>
           {!currentAccount ? <Modal
