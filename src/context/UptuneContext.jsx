@@ -24,11 +24,13 @@ function makeGatewayURL(cid, path) {
 export const UptuneProvider = ({children}) => {
     const [currentAccount, setCurrentAccount] = useState('')
     const [storage, setStorage] = useState('');
+    const [error, setError] = useState([]);
+    const [upload, setUpload] = useState(false);
+
     const [loading, setLoading] = useState(false);
     const [tipLoading, setTipLoading] = useState(false);
     const [loadingStatus, setLoadingStatus] = useState('');
-    const [error, setError] = useState([]);
-    const [upload, setUpload] = useState(false);
+    const [commentLoading, setCommentLoading] = useState(false);
 
     const location = useLocation();
 
@@ -57,14 +59,41 @@ export const UptuneProvider = ({children}) => {
         }
     }
 
+    const getAllComments = async () => {
+        try {
+            setCommentLoading(true)
+
+            const transactionContract = getEthereumContract()
+            const AllComments = await transactionContract.getAllComments(1)
+
+            const structuredComments = {
+                id: AllComments.id,
+                amount: AllComments.amount,
+                comment: AllComments.comment,
+                timestamp: AllComments.timestamp
+            }
+
+            let arrayOfComments = [];
+
+            for(let i = 0; i < structuredComments.comment.length; i++){
+                arrayOfComments.push({comment: structuredComments.comment[i], amount: ethers.utils.formatEther(structuredComments.amount[i]), timestamp: new Date(structuredComments.timestamp[i].toNumber() * 1000).toLocaleString()})
+            }
+
+            setCommentLoading(false)
+
+            return arrayOfComments
+        } catch (error) {
+            setCommentLoading(false)
+            console.log(error)
+        }
+    }
+
     const getAllAudio = async () =>{
         try {
             setLoading(true)
 
             const transactionContract = getEthereumContract()
             const AllAudio = await transactionContract.getAllAudio()
-
-            console.log(AllAudio)
 
             const structuredAudio = AllAudio.map((audio) =>({
                 id: Number(audio.id),
@@ -122,7 +151,7 @@ export const UptuneProvider = ({children}) => {
             //*send to blockchain
             setLoadingStatus("Uploading to the Blockchain")
             const transactionContract = getEthereumContract()
-            const transactionHash = await transactionContract.uploadAudio(audioGateway, coverartGateway, files.mainArtist, files.title, files.moods, files.genres, files.supportArtist, [])
+            const transactionHash = await transactionContract.uploadAudio(audioGateway, coverartGateway, files.mainArtist, files.title, files.moods, files.genres, files.supportArtist)
 
             setLoadingStatus("Waiting to confirm Transaction")
             const transactionReceipt = await transactionHash.wait();
@@ -157,9 +186,9 @@ export const UptuneProvider = ({children}) => {
                 }]
             })
 
-            console.log(transactionContract)
             const transactionHash = await transactionContract.sendTip(id, parsedAmount, message)
             const transactionReceipt = await transactionHash.wait();
+
             setTipLoading(1)
         } catch (error) {
             console.log(error)
@@ -203,7 +232,7 @@ export const UptuneProvider = ({children}) => {
     }, [])
 
     return(
-        <UptuneContext.Provider value={{checkIfUpload, upload, connectWallet, currentAccount, storage, uploadAudio, loading, loadingStatus, getAllAudio, getOneAudio, error, setError, sendTip, tipLoading, setTipLoading}}>
+        <UptuneContext.Provider value={{checkIfUpload, upload, connectWallet, currentAccount, storage, uploadAudio, loading, loadingStatus, getAllAudio, getOneAudio, error, setError, sendTip, tipLoading, setTipLoading, setCommentLoading, commentLoading, getAllComments}}>
             {children}
         </UptuneContext.Provider>
     )

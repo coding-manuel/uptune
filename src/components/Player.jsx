@@ -1,6 +1,6 @@
 import React, {useContext, useEffect, useState} from 'react'
-import { Footer, Group, Image, Stack, Text, ActionIcon, Box } from '@mantine/core';
-import { Play, SkipForward, SkipBack, Pause, SpeakerSimpleHigh, SpeakerSimpleSlash, CurrencyEth } from 'phosphor-react'
+import { Footer, Group, Image, Stack, Text, ActionIcon, Box, Tooltip } from '@mantine/core';
+import { Play, SkipForward, SkipBack, Pause, SpeakerSimpleHigh, SpeakerSimpleSlash, CurrencyEth, Chats } from 'phosphor-react'
 import AudioPlayer, {RHAP_UI} from 'react-h5-audio-player';
 import Marquee from "react-fast-marquee";
 
@@ -11,7 +11,7 @@ import { MusicContext } from '../context/MusicContext';
 import { useMediaQuery } from '@mantine/hooks';
 
 const Playing = ({songInfo, matches}) => {
-  const mobile = useMediaQuery('(max-width: 450px)');
+  const mobile = useMediaQuery('(max-width: 500px)');
 
   return(
     <Group noWrap mx={20} spacing='md'>
@@ -30,8 +30,28 @@ const Playing = ({songInfo, matches}) => {
   )
 }
 
+const IconButton = ({ setOpen, type, matches }) => {
+  return(
+    <Box onClick={() => setOpen(true)} sx={{flex: matches && '1 0 auto', marginLeft: !matches && '16px', justifyContent: 'flex-end', display: 'flex'}}>
+      <Tooltip
+        label={<Text size='xs' weight={600}>{type}</Text>}
+        withArrow
+        gutter={10}
+      >
+        <ActionIcon p={4} sx={{width: "initial", height: "initial"}}>
+          {type === 'Comments' ?
+          <Chats size={24} weight="fill" />
+          :
+          <CurrencyEth size={24} weight="fill" />
+          }
+        </ActionIcon>
+      </Tooltip>
+    </Box>
+  )
+}
+
 export default function Player() {
-  const {songData, setModalOpen} = useContext(MusicContext);
+  const {songData, setModalOpen, commentDrawer, setCommentDrawer} = useContext(MusicContext);
   const matches = useMediaQuery('(max-width: 600px)');
   const [songInfo, setSongInfo] = useState([]);
 
@@ -54,7 +74,8 @@ export default function Player() {
               RHAP_UI.MAIN_CONTROLS,
               <Playing matches={matches} songInfo={songInfo} />,
               !matches && RHAP_UI.VOLUME_CONTROLS,
-              <Box onClick={() => setModalOpen(true)} sx={{flex: matches && '1 0 auto', marginLeft: !matches && '16px', justifyContent: 'flex-end', display: 'flex'}}><ActionIcon p={4} sx={{width: "initial", height: "initial"}}><CurrencyEth size={24} weight="fill" /></ActionIcon></Box>,
+              <IconButton setOpen={setModalOpen} type="Tip" matches={matches} />,
+              <IconButton setOpen={setCommentDrawer} type="Comments" matches={matches} />
             ]
           }
           showSkipControls={true}

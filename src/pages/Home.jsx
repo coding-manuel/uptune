@@ -1,5 +1,5 @@
 import React, {useContext, useState, useEffect, useRef} from 'react'
-import { LoadingOverlay, Text, Group, ActionIcon } from '@mantine/core';
+import { LoadingOverlay, Button, ActionIcon } from '@mantine/core';
 import { Swiper, SwiperSlide, useSwiper } from 'swiper/react';
 import { CaretRight, CaretLeft } from "phosphor-react"
 import { Navigation } from 'swiper';
@@ -8,6 +8,7 @@ import { showNotification } from '@mantine/notifications';
 import { UptuneContext } from '../context/UptuneContext'
 import TipModal from '../components/TipModal';
 import SongThumb from '../components/SongThumb';
+import CommentDrawer from '../components/CommentDrawer';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
@@ -32,6 +33,7 @@ export default function Home() {
   return (
     <>
       <LoadingOverlay visible={loading} />
+      <CommentDrawer songData={songs} />
       <TipModal />
       <Swiper
         style={{zIndex: 0}}
