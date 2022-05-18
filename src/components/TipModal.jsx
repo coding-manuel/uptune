@@ -92,7 +92,14 @@ export default function TipModal() {
                             />
                             <Button loading={tipLoading} type='submit'>Send<PaperPlaneRight style={{paddingLeft: 4}} size={20} weight="fill" /></Button>
                         </Group>
-
+                        {/* <Stack spacing='xs'>
+                            <Text size='xs'>Suggested Tips</Text>
+                            <Group grow>
+                                <Button color="gray" size='xs' variant='outline' compact onClick={() => addTip(0.3)}>+ 0.3 ETH</Button>
+                                <Button color="gray" size='xs' variant='outline' compact onClick={() => addTip(0.5)}>+ 0.5 ETH</Button>
+                                <Button color="gray" size='xs' variant='outline' compact onClick={() => addTip(1)}>+ 1 ETH</Button>
+                            </Group>
+                        </Stack> */}
                     </Stack>
                     }
                 </Stack>

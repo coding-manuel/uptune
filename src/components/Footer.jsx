@@ -33,7 +33,7 @@ export default function FooterComp() {
   const { classes } = useStyles();
 
   return (
-    <Footer className={classes.footer}>
+    <Footer fixed className={classes.footer}>
       <Container size='lg' className={classes.inner}>
         <Stack align='flex-start' sx={{width: '300px'}}>
           <img style={{height: 40}} src={Logo} alt="" />

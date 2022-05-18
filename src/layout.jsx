@@ -20,7 +20,6 @@ export default function Layout({ children }) {
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
 
-
   useEffect(() => {
     checkIfUpload()
   }, [location.pathname]);
@@ -34,10 +33,10 @@ export default function Layout({ children }) {
         },
       }}
       fixed
-      footer={!upload && <Player />}
+      footer={<Player />}
       header={<Navbar />}
     >
-        <Container size='lg'>
+        <Container size='lg' pb={100} >
           {!currentAccount ? <Modal
             overlayColor={theme.colorScheme === 'dark' ? theme.colors.dark[9] : theme.colors.gray[2]}
             overlayOpacity={0.55}

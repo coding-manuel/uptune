@@ -12,6 +12,7 @@ import CommentDrawer from '../components/CommentDrawer';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
+import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
   const {getAllAudio, loading} = useContext(UptuneContext);

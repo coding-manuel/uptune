@@ -141,14 +141,14 @@ export const UptuneProvider = ({children}) => {
             //*upload to ipfs
             setLoadingStatus("Uploading Audio to IPFS")
             const audiohash = await storage.put(files.audio, {
-                name: files.mainArtist.concat('-', files.title)
+                name: files.mainArtist.concat('-', files.title, '|', currentAccount.slice(-5))
             })
             setLoadingStatus("Uploading Cover Art to IPFS")
             const coverarthash = await storage.put(files.art, {
-                name: files.mainArtist.concat('-', files.title, '|coverart')
+                name: files.mainArtist.concat('-', files.title, '|', currentAccount.slice(-5), '|coverart')
             })
-            const audioGateway = makeGatewayURL(audiohash, files.audio[0].path)
-            const coverartGateway = makeGatewayURL(coverarthash, files.art[0].path)
+            const audioGateway = makeGatewayURL(audiohash, files.audio[0].name)
+            const coverartGateway = makeGatewayURL(coverarthash, files.art[0].name)
 
             //*send to blockchain
             setLoadingStatus("Uploading to the Blockchain")

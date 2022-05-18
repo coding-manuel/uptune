@@ -1,17 +1,31 @@
 import { useRef, useState, useContext, useEffect } from 'react'
-import { Button, Chips, Chip, TextInput, Group, Stack, Text, MediaQuery, MultiSelect} from '@mantine/core'
+import { Button, Chips, Chip, TextInput, Group, Stack, Text, MediaQuery, MultiSelect, Slider } from '@mantine/core'
+import AvatarEditor from 'react-avatar-editor'
 import { Dropzone  } from '@mantine/dropzone'
 import { showNotification } from '@mantine/notifications'
 import { Camera } from "phosphor-react"
 import { useNavigate } from 'react-router-dom'
 import { useForm } from '@mantine/form'
+import imageCompression from 'browser-image-compression';
 
 import logo from "../assets/Symbol_White.svg"
 import { UptuneContext } from '../context/UptuneContext'
 
-export const coverArtChildren = (file) => (
-    <Group position="center" spacing="sm" style={{ height: 200, width: 200, pointerEvents: 'none' }}>
-        {file ? <img src={file[1]} style={{height: 200, width: 200, objectFit: 'cover'}} alt="" srcset="" /> :
+export const coverArtChildren = (file, scale, editor) => (
+    <Group position="center" spacing="sm" style={{ height: 250, width: 250 }}>
+        {file ?
+        <AvatarEditor
+            style={{zIndex: 10000}}
+            image={file[1]}
+            width={250}
+            height={250}
+            scale={scale}
+            rotate={0}
+            border={0}
+            ref={editor}
+            onClick={()=>console.log("fkjdxhfgk")}
+        />
+        :
         <>
         <Camera size={24} weight="fill" />
         <Text size="sm" color="dimmed" inline>
@@ -38,10 +52,15 @@ const genresList = ['Rock', 'Jazz', 'Dubstep', 'Techno', 'Pop', 'Classical']
 
 export default function Upload() {
     const {uploadAudio, currentAccount, loading, loadingStatus, getAllAudio, getOneAudio} = useContext(UptuneContext)
+    const [coverDropLoad, setCoverDropLoad] = useState(false);
+    const [audioDropLoad, setAudioDropLoad] = useState(false);
     const [tags, setTags] = useState([])
+    const [scale, setScale] = useState(1);
     const [genres, setGenres] = useState([])
     const [audioAccepted, setAudioAccepted] = useState(false)
     const [artAccepted, setArtAccepted] = useState(false)
+
+    const editor = useRef()
 
     const navigate = useNavigate()
 
@@ -92,9 +111,11 @@ export default function Upload() {
             setAudioAccepted(files)
         }
         else if (type === 'image'){
+            setCoverDropLoad(true)
             var reader  = new FileReader()
             reader.onload = (e) =>{
                 setArtAccepted([files, e.target.result])
+                setCoverDropLoad(false)
             }
             reader.readAsDataURL(files[0])
         }
@@ -109,7 +130,7 @@ export default function Upload() {
         }
     }
 
-    const handleSubmit = (values) =>{
+    const handleSubmit = async (values) =>{
         if(tags.length === 0){
             console.log(tags)
             showNotification({
@@ -139,11 +160,39 @@ export default function Upload() {
             })
             return
         }
+        const art = await handleCrop()
+        const name = values.mainArtist.concat('-', values.title)
+        const file = [new File([art], `${name}.jpg`, {type:"image/jpeg", lastModified:new Date()})]
+        const audio = [new File(audioAccepted, `${name}.mp3`, {type:audioAccepted[0].type , lastModified:new Date()})]
+
         values.genres = genres
         values.moods = tags
-        values.audio = audioAccepted
-        values.art = artAccepted[0]
+        values.audio = audio
+        values.art = file
         uploadAudio(values)
+    }
+
+    const handleCrop = async () => {
+        // const img =
+        var dataurl = editor.current.getImage().toDataURL()
+
+        var arr = dataurl.split(','), mime = arr[0].match(/:(.*?);/)[1],
+        bstr = atob(arr[1]), n = bstr.length, u8arr = new Uint8Array(n)
+        while(n--){
+            u8arr[n] = bstr.charCodeAt(n)
+        }
+        const blob = new Blob([u8arr], {type:mime})
+        const file = new File([blob], `path.jpg`, {type:"image/jpeg", lastModified:new Date()})
+
+        const options = {
+            maxSizeMB: 2,
+            maxWidthOrHeight: 250,
+            useWebWorker: true,
+        }
+
+        const compressedFile = await imageCompression(file, options)
+
+        return compressedFile
     }
 
     useEffect(()=>{
@@ -158,21 +207,43 @@ export default function Upload() {
             query="(max-width: 700px)"
             styles={{ flexWrap: "wrap", justifyContent: 'center' }}
         >
-            <Group noWrap spacing={48} align='flex-start'>
-                <Dropzone
-                    padding={0}
-                    accept={['image/png', 'image/jpeg']}
-                    onDrop={(files) => handleDrop(files, 'image')}
-                    onReject={(files) => handleReject(files, 'image')}
-                >
-                    {() => coverArtChildren(artAccepted)}
-                </Dropzone>
+            <Group noWrap spacing={48} align='flex-start' sx={{justifyContent: 'center'}} >
+                <Stack>
+                    <Dropzone
+                        padding={0}
+                        multiple={false}
+                        accept={['image/png', 'image/jpeg']}
+                        onDrop={(files) => handleDrop(files, 'image')}
+                        onReject={(files) => handleReject(files, 'image')}
+                        disabled={artAccepted}
+                        loading={coverDropLoad}
+                    >
+                        {() => coverArtChildren(artAccepted, scale, editor)}
+                    </Dropzone>
+                    {artAccepted &&
+                        <Group grow pt={16}>
+                            <Slider
+                                color="red"
+                                size="xs"
+                                radius="xs"
+                                value={scale}
+                                min={1}
+                                max={2}
+                                step={0.1}
+                                onChange={setScale}
+                            />
+                            <Button color="gray" size='xs' variant='outline' compact onClick={() => setArtAccepted(false)}>Remove Image</Button>
+                    </Group>
+                    }
+                </Stack>
                 <form onSubmit={form.onSubmit((values) => handleSubmit(values))}>
                     <Stack>
                         <Dropzone
                             accept={['audio/mpeg', 'audio/x-wav']}
+                            multiple={false}
                             onDrop={(files) => handleDrop(files, 'audio')}
                             onReject={(files) => handleReject(files, 'audio')}
+                            loading={audioDropLoad}
                         >
                             {() => audioChildren(audioAccepted[0])}
                         </Dropzone>
