@@ -1,5 +1,5 @@
 import { useRef, useState, useContext, useEffect } from 'react'
-import { Button, Chips, Chip, TextInput, Group, Stack, Text, MediaQuery, MultiSelect, Slider } from '@mantine/core'
+import { Button, Chips, Chip, TextInput, Group, Stack, Text, MediaQuery, MultiSelect, Slider, Modal, LoadingOverlay } from '@mantine/core'
 import AvatarEditor from 'react-avatar-editor'
 import { Dropzone  } from '@mantine/dropzone'
 import { showNotification } from '@mantine/notifications'
@@ -10,6 +10,7 @@ import imageCompression from 'browser-image-compression';
 
 import logo from "../assets/Symbol_White.svg"
 import { UptuneContext } from '../context/UptuneContext'
+import CreateArtist from "../components/CreateArtist"
 
 export const coverArtChildren = (file, scale, editor) => (
     <Group position="center" spacing="sm" style={{ height: 250, width: 250 }}>
@@ -51,7 +52,9 @@ const moods = ['Happy', 'Exuberant', 'Energetic', 'Frantic', 'Sad', 'Calm', 'Con
 const genresList = ['Rock', 'Jazz', 'Dubstep', 'Techno', 'Pop', 'Classical']
 
 export default function Upload() {
-    const {uploadAudio, currentAccount, loading, loadingStatus, getAllAudio, getOneAudio} = useContext(UptuneContext)
+    const {uploadAudio, currentAccount, loading, loadingStatus, getArtist, artistExists} = useContext(UptuneContext)
+    const [artistExist, setArtistExist] = useState(false);
+    const [artist, setArtist] = useState({});
     const [coverDropLoad, setCoverDropLoad] = useState(false);
     const [audioDropLoad, setAudioDropLoad] = useState(false);
     const [tags, setTags] = useState([])
@@ -124,9 +127,15 @@ export default function Upload() {
     const handleReject = (files, type) =>{
         if(type === 'audio'){
             setAudioAccepted(false)
+            showNotification({
+                title: 'I guess you have to put an mp3?',
+            })
         }
         else if (type === 'image'){
             setArtAccepted(false)
+            showNotification({
+                title: 'I think you got confused between audio and image.',
+            })
         }
     }
 
@@ -201,8 +210,35 @@ export default function Upload() {
         }
     },[loadingStatus])
 
+    useEffect(()=>{
+        async function artistEx() {
+          let response = await artistExists(currentAccount)
+          setArtistExist(response)
+        }
+        artistEx()
+    }, [])
+
+    useEffect(()=>{
+        async function artistget() {
+            let response = await getArtist(currentAccount)
+            setArtist(response)
+        }
+        artistExist && artistget()
+    }, [artistExist])
+
     return (
       <Stack>
+        <LoadingOverlay visible={loading} />
+        <Modal
+            overlayOpacity={0.55}
+            overlayBlur={3}
+            opened={!artistExist}
+            withCloseButton={false}
+            centered
+            size='xs'
+        >
+            <CreateArtist />
+        </Modal>
         <MediaQuery
             query="(max-width: 700px)"
             styles={{ flexWrap: "wrap", justifyContent: 'center' }}
@@ -258,10 +294,12 @@ export default function Upload() {
                             {...form.getInputProps('wallet')}
                         />
                         <TextInput
-                            placeholder="MC Stan"
+                            placeholder={artist.artistName}
+                            value={artist.artistName}
                             label="Main Artist"
                             radius="md"
                             required
+                            disabled
                             {...form.getInputProps('mainArtist')}
                         />
                         <TextInput
@@ -306,6 +344,6 @@ export default function Upload() {
                 </form>
             </Group>
         </MediaQuery>
-      </Stack>
+    </Stack>
     )
 }

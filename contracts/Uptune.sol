@@ -82,8 +82,21 @@ contract Uptune {
     return audios[uuidToId[_uuid]];
   }
 
+  function getMultipleAudio(string[] memory _songs) public view returns(Audio[] memory){
+    Audio[] memory songList;
+    for(uint i = 0; i < _songs.length; ++i){
+      songList[0] = audios[uuidToId[_songs[i]]];
+    }
+
+    return songList;
+  }
+
   function getAllComments(uint _id) public view returns(Comment memory) {
     return comments[_id];
+  }
+
+  function artistExists(address _add) public view returns(bool){
+    return bytes(artists[_add].artistID).length != 0;
   }
 
   function getArtist(address _add) public view returns(Artist memory){

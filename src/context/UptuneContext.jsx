@@ -38,6 +38,17 @@ const structureSongData = (audio) => {
     return songData
 }
 
+const structureArtistData = (artist) => {
+    const artistData = {
+        artistName: artist.artist,
+        artistSongs: artist.songs,
+        profilegateway: artist.profilegateway,
+        artistID: artist.artistID
+    }
+
+    return artistData
+}
+
 function makeGatewayURL(cid, path) {
     return `https://${cid}.ipfs.dweb.link/${encodeURIComponent(path)}`
 }
@@ -105,6 +116,55 @@ export const UptuneProvider = ({children}) => {
             return arrayOfComments
         } catch (error) {
             setCommentLoading(false)
+            console.log(error)
+        }
+    }
+
+    const createArtist = async (values) => {
+        try {
+            setLoading(true)
+
+            //*upload to ipfs
+            const profilehash = await storage.put(values.pf, {
+                name: values.artist.concat('-', '|profile-picture', '|', currentAccount.slice(-5))
+            })
+
+            const profilegateway = makeGatewayURL(profilehash, values.pf[0].name)
+
+            const transactionContract = getEthereumContract()
+            const transactionHash = await transactionContract.createArtist(uuid(), values.artist, profilegateway)
+
+            const transactionReceipt = await transactionHash.wait();
+
+            setLoading(false)
+
+            artistExists(currentAccount)
+        } catch (error) {
+            setLoading(false)
+            console.log(error)
+        }
+    }
+
+    const getArtist = async (address) => {
+        try {
+            const transactionContract = getEthereumContract()
+            const artist = await transactionContract.getArtist(address)
+
+            const structuredArtist = structureArtistData(artist)
+
+            return structuredArtist
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const artistExists = async (address) => {
+        try {
+            const transactionContract = getEthereumContract()
+            const exists = await transactionContract.artistExists(address)
+
+            return exists
+        } catch (error) {
             console.log(error)
         }
     }
@@ -261,7 +321,7 @@ export const UptuneProvider = ({children}) => {
     }, [])
 
     return(
-        <UptuneContext.Provider value={{checkIfUpload, upload, connectWallet, currentAccount, storage, uploadAudio, loading, loadingStatus, getAllAudio, getOneAudio, error, setError, sendTip, tipLoading, setTipLoading, setCommentLoading, commentLoading, getAllComments, getArtistSongs}}>
+        <UptuneContext.Provider value={{checkIfUpload, upload, connectWallet, currentAccount, storage, uploadAudio, loading, loadingStatus, getAllAudio, getOneAudio, error, setError, sendTip, tipLoading, setTipLoading, setCommentLoading, commentLoading, getAllComments, getArtistSongs, getArtist, artistExists, createArtist}}>
             {children}
         </UptuneContext.Provider>
     )
