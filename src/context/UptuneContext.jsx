@@ -55,10 +55,13 @@ function makeGatewayURL(cid, path) {
 
 export const UptuneProvider = ({children}) => {
     const [currentAccount, setCurrentAccount] = useState('')
+    const [artistExist, setArtistExist] = useState(false);
+    const [artist, setArtist] = useState({});
     const [storage, setStorage] = useState('');
     const [error, setError] = useState([]);
     const [upload, setUpload] = useState(false);
 
+    const [mainLoader, setMainLoader] = useState(false);
     const [loading, setLoading] = useState(false);
     const [tipLoading, setTipLoading] = useState(false);
     const [loadingStatus, setLoadingStatus] = useState('');
@@ -84,6 +87,27 @@ export const UptuneProvider = ({children}) => {
             }else{
                 setError([true, "Connect Wallet"])
             }
+        } catch (error) {
+            console.log(error)
+
+            throw new Error("No Ethereum Object")
+        }
+    }
+
+    const checkIfArtistCreated = async () =>{
+        try {
+            if(!ethereum) return alert("Please Install MetaMask")
+
+            const transactionContract = getEthereumContract()
+            const exists = await transactionContract.artistExists(currentAccount)
+
+            setArtistExist(exists)
+
+            if(exists){
+                const artist = await getArtist(currentAccount)
+                setArtist(artist)
+            }
+
         } catch (error) {
             console.log(error)
 
@@ -136,9 +160,10 @@ export const UptuneProvider = ({children}) => {
 
             const transactionReceipt = await transactionHash.wait();
 
+            const artist = await checkIfArtistCreated();
+
             setLoading(false)
 
-            artistExists(currentAccount)
         } catch (error) {
             setLoading(false)
             console.log(error)
@@ -153,17 +178,6 @@ export const UptuneProvider = ({children}) => {
             const structuredArtist = structureArtistData(artist)
 
             return structuredArtist
-        } catch (error) {
-            console.log(error)
-        }
-    }
-
-    const artistExists = async (address) => {
-        try {
-            const transactionContract = getEthereumContract()
-            const exists = await transactionContract.artistExists(address)
-
-            return exists
         } catch (error) {
             console.log(error)
         }
@@ -197,6 +211,21 @@ export const UptuneProvider = ({children}) => {
             const all = await transactionContract.getOneAudio(uuid)
 
             const structuredAudio = structureSongData(all)
+
+            return structuredAudio
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const getMultipleAudio = async (artist) =>{
+        try {
+            const transactionContract = getEthereumContract()
+            const all = await transactionContract.getMultipleAudio(artist.artistSongs)
+            console.log(artist.artistSongs)
+            console.log(all)
+
+            const structuredAudio = all
 
             return structuredAudio
         } catch (error) {
@@ -303,25 +332,14 @@ export const UptuneProvider = ({children}) => {
         }
     }
 
-    const checkIfUpload = () => {
-        const transactionContract = getEthereumContract()
-
-        console.log(transactionContract)
-        if(location.pathname === '/upload')
-            setUpload(true)
-        else
-            setUpload(false)
-    }
-
     useEffect(() =>{
-        checkIfUpload()
         connectToIPFS()
         checkIfWalletIsConnected()
-
-    }, [])
+        checkIfArtistCreated()
+    }, [currentAccount])
 
     return(
-        <UptuneContext.Provider value={{checkIfUpload, upload, connectWallet, currentAccount, storage, uploadAudio, loading, loadingStatus, getAllAudio, getOneAudio, error, setError, sendTip, tipLoading, setTipLoading, setCommentLoading, commentLoading, getAllComments, getArtistSongs, getArtist, artistExists, createArtist}}>
+        <UptuneContext.Provider value={{connectWallet, currentAccount, storage, uploadAudio, loading, loadingStatus, getAllAudio, getOneAudio, getMultipleAudio, error, setError, sendTip, tipLoading, setTipLoading, setCommentLoading, commentLoading, getAllComments, getArtistSongs, getArtist, createArtist, artistExist, artist, mainLoader}}>
             {children}
         </UptuneContext.Provider>
     )

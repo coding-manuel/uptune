@@ -82,10 +82,10 @@ contract Uptune {
     return audios[uuidToId[_uuid]];
   }
 
-  function getMultipleAudio(string[] memory _songs) public view returns(Audio[] memory){
-    Audio[] memory songList;
-    for(uint i = 0; i < _songs.length; ++i){
-      songList[0] = audios[uuidToId[_songs[i]]];
+  function getMultipleAudio(string[] memory _songs) public view returns(Audio[] memory) {
+    Audio[] memory songList = new Audio[](_songs.length);
+    for(uint i = 0; i < _songs.length; i++){
+      songList[i] = audios[uuidToId[_songs[i]]];
     }
 
     return songList;

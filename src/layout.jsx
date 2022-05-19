@@ -6,23 +6,22 @@ import {
   Modal,
   Button,
   Text,
-  Stack
+  Stack,
+  LoadingOverlay
 } from '@mantine/core';
+import { useLocation } from 'react-router-dom';
 
 import Navbar from './components/Navbar';
 import Player from './components/Player'
 import { UptuneContext } from './context/UptuneContext';
-import { useLocation } from 'react-router-dom';
+import CreateArtist from "./components/CreateArtist"
+
 
 export default function Layout({ children }) {
-  const {checkIfUpload, upload, currentAccount, loading, connectWallet} = useContext(UptuneContext);
+  const {artistExist, currentAccount, loading, connectWallet, mainLoader} = useContext(UptuneContext);
   const location = useLocation()
   const theme = useMantineTheme();
   const [opened, setOpened] = useState(false);
-
-  useEffect(() => {
-    checkIfUpload()
-  }, [location.pathname]);
 
   return (
     <AppShell
@@ -36,26 +35,37 @@ export default function Layout({ children }) {
       footer={<Player />}
       header={<Navbar />}
     >
-        <Container size='lg' pb={100} >
-          {!currentAccount ? <Modal
+      <LoadingOverlay visible={mainLoader} />
+      <Container size='lg' pb={100} >
+        {!currentAccount ? <Modal
+          overlayOpacity={0.55}
+          overlayBlur={3}
+          opened={!currentAccount}
+          withCloseButton={false}
+          centered
+          size='xs'
+        >
+          <Stack>
+            <Text align='center' size='sm'>To access the website connect your metamask wallet</Text>
+            <Button loading={loading} onClick={connectWallet} radius="md" size="xs">
+              Connect Wallet
+            </Button>
+          </Stack>
+        </Modal>
+        : !artistExist ?
+          <Modal
             overlayOpacity={0.55}
             overlayBlur={3}
-            opened={!currentAccount}
+            opened={!artistExist}
             withCloseButton={false}
             centered
             size='xs'
-          >
-            <Stack>
-              <Text align='center' size='sm'>To access the website connect your metamask wallet</Text>
-              <Button loading={loading} onClick={connectWallet} radius="md" size="xs">
-                Connect Wallet
-              </Button>
-            </Stack>
-          </Modal>
-          :
-            children
-          }
-        </Container>
+        >
+            <CreateArtist />
+        </Modal> :
+          children
+        }
+      </Container>
     </AppShell>
   );
 }

@@ -10,7 +10,6 @@ import imageCompression from 'browser-image-compression';
 
 import logo from "../assets/Symbol_White.svg"
 import { UptuneContext } from '../context/UptuneContext'
-import CreateArtist from "../components/CreateArtist"
 
 export const coverArtChildren = (file, scale, editor) => (
     <Group position="center" spacing="sm" style={{ height: 250, width: 250 }}>
@@ -52,9 +51,8 @@ const moods = ['Happy', 'Exuberant', 'Energetic', 'Frantic', 'Sad', 'Calm', 'Con
 const genresList = ['Rock', 'Jazz', 'Dubstep', 'Techno', 'Pop', 'Classical']
 
 export default function Upload() {
-    const {uploadAudio, currentAccount, loading, loadingStatus, getArtist, artistExists} = useContext(UptuneContext)
-    const [artistExist, setArtistExist] = useState(false);
-    const [artist, setArtist] = useState({});
+    const {uploadAudio, currentAccount, loading, loadingStatus, getArtist, artistExist, artist} = useContext(UptuneContext)
+    const [artistData, setArtistData] = useState({});
     const [coverDropLoad, setCoverDropLoad] = useState(false);
     const [audioDropLoad, setAudioDropLoad] = useState(false);
     const [tags, setTags] = useState([])
@@ -78,7 +76,6 @@ export default function Upload() {
         },
 
         validate: {
-            mainArtist: (value) => value.length > 2 ? null : 'Enter Valid Artist Name',
             title: (value) => value.length > 2 ? null : 'Enter Valid Song Title',
         },
       })
@@ -174,6 +171,7 @@ export default function Upload() {
         const file = [new File([art], `${name}.jpg`, {type:"image/jpeg", lastModified:new Date()})]
         const audio = [new File(audioAccepted, `${name}.mp3`, {type:audioAccepted[0].type , lastModified:new Date()})]
 
+        values.mainArtist = artistData.artistName
         values.genres = genres
         values.moods = tags
         values.audio = audio
@@ -211,34 +209,11 @@ export default function Upload() {
     },[loadingStatus])
 
     useEffect(()=>{
-        async function artistEx() {
-          let response = await artistExists(currentAccount)
-          setArtistExist(response)
-        }
-        artistEx()
-    }, [])
-
-    useEffect(()=>{
-        async function artistget() {
-            let response = await getArtist(currentAccount)
-            setArtist(response)
-        }
-        artistExist && artistget()
-    }, [artistExist])
+        setArtistData(artist)
+    }, [artist])
 
     return (
       <Stack>
-        <LoadingOverlay visible={loading} />
-        <Modal
-            overlayOpacity={0.55}
-            overlayBlur={3}
-            opened={!artistExist}
-            withCloseButton={false}
-            centered
-            size='xs'
-        >
-            <CreateArtist />
-        </Modal>
         <MediaQuery
             query="(max-width: 700px)"
             styles={{ flexWrap: "wrap", justifyContent: 'center' }}
@@ -294,8 +269,8 @@ export default function Upload() {
                             {...form.getInputProps('wallet')}
                         />
                         <TextInput
-                            placeholder={artist.artistName}
-                            value={artist.artistName}
+                            placeholder={artistData.artistName}
+                            value={artistData.artistName}
                             label="Main Artist"
                             radius="md"
                             required
