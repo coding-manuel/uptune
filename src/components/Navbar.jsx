@@ -1,6 +1,6 @@
-import React, { useState, useContext } from 'react';
+import React, { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { createStyles, Header, ActionIcon, Container, Group, Burger, Paper, Transition, Button, Text } from '@mantine/core';
+import { createStyles, Header, ActionIcon, Container, Group, Avatar, Tooltip, Text } from '@mantine/core';
 import { UptuneContext } from '../context/UptuneContext'
 import { Plus } from "phosphor-react"
 
@@ -46,32 +46,34 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function Navbar() {
-  const {currentAccount, connectWallet} = useContext(UptuneContext);
+  const {currentAccount, connectWallet, artist} = useContext(UptuneContext);
   const { classes, cx } = useStyles();
+  const [artistData, setArtistData] = useState({});
   const navigate = useNavigate()
 
   const handleLogoClick = () => {
     navigate("/home")
   }
 
+  useEffect(()=>{
+    setArtistData(artist)
+  }, [artist])
+
   return (
     <Header fixed height={HEADER_HEIGHT} className={classes.root}>
       <Container size='lg' className={classes.header}>
         <img onClick={handleLogoClick} style={{height: 30, cursor: "pointer"}} src={Logo} alt="" />
         <Group spacing={24}>
-          <Group spacing={5} className={classes.links}>
-            {!currentAccount ?
-              <Button onClick={connectWallet} radius="xs" size="sm" fullWidth>
-                Connect Wallet
-              </Button> :
-              <Paper shadow="xs" p="md">{shortenAddress(currentAccount)}</Paper>
-            }
-          </Group>
-          <Group>
+          <Tooltip
+            label={<Text size='xs' weight={600}>Upload</Text>}
+            withArrow
+            gutter={10}
+          >
             <ActionIcon component={Link} to='upload' variant="light" sx={{padding: 4}}>
               <Plus size={24} weight="fill" />
             </ActionIcon>
-          </Group>
+          </Tooltip>
+          <Avatar sx={{cursor: "pointer"}} size='sm' src={artist.profilegateway} alt={artist.artistName} />
         </Group>
       </Container>
     </Header>
