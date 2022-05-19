@@ -5,6 +5,8 @@ contract Uptune {
   uint public audioCount = 0;
   mapping(uint => Audio) public audios;
   mapping(uint => Comment) public comments;
+  mapping(string => uint) public uuidToId;
+  mapping(address => string[]) public artistSongs;
 
   struct Comment {
     uint id;
@@ -15,6 +17,7 @@ contract Uptune {
 
   struct Audio {
     uint id;
+    string uuid;
     uint amount;
     uint256 timestamp;
     address wallet;
@@ -29,6 +32,7 @@ contract Uptune {
 
   event AudioUploaded(
     uint id,
+    string uuid,
     uint amount,
     uint256 timestamp,
     address wallet,
@@ -41,7 +45,7 @@ contract Uptune {
     string authors
   );
 
-  function uploadAudio(string memory _audiogateway, string memory _coverartgateway, string memory _mainAuthor, string memory _title, string[] memory _tags, string[] memory _genres, string memory _authors) public {
+  function uploadAudio(string memory _uuid, string memory _audiogateway, string memory _coverartgateway, string memory _mainAuthor, string memory _title, string[] memory _tags, string[] memory _genres, string memory _authors) public {
     require(bytes(_audiogateway).length > 0);
     require(bytes(_coverartgateway).length > 0);
     require(bytes(_title).length > 0);
@@ -49,8 +53,13 @@ contract Uptune {
 
     audioCount ++;
 
-    audios[audioCount] = Audio(audioCount, 0, block.timestamp , msg.sender, _audiogateway, _coverartgateway, _title, _mainAuthor, _tags, _genres, _authors);
-    emit AudioUploaded(audioCount, 0, block.timestamp, msg.sender, _audiogateway, _coverartgateway, _title, _mainAuthor, _tags, _genres, _authors);
+    audios[audioCount] = Audio(audioCount, _uuid, 0, block.timestamp , msg.sender, _audiogateway, _coverartgateway, _title, _mainAuthor, _tags, _genres, _authors);
+
+    uuidToId[_uuid] = audioCount;
+
+    artistSongs[msg.sender].push(_uuid);
+
+    emit AudioUploaded(audioCount, _uuid, 0, block.timestamp, msg.sender, _audiogateway, _coverartgateway, _title, _mainAuthor, _tags, _genres, _authors);
   }
 
   function getAllAudio() public view returns (Audio[] memory){
@@ -61,12 +70,16 @@ contract Uptune {
     return ret;
   }
 
-  function getOneAudio(uint _audioCount) public view returns(Audio memory) {
-    return audios[_audioCount];
+  function getOneAudio(string memory _uuid) public view returns(Audio memory) {
+    return audios[uuidToId[_uuid]];
   }
 
   function getAllComments(uint _id) public view returns(Comment memory) {
     return comments[_id];
+  }
+
+  function getArtistSongs(address _add) public view returns(string[] memory){
+    return artistSongs[_add];
   }
 
   function sendTip(uint _id, uint _amount, string memory _message) public{

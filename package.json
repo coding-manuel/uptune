@@ -26,6 +26,7 @@
     "react-h5-audio-player": "^3.7.0",
     "react-router-dom": "^6.3.0",
     "react-time-ago": "^7.1.9",
+    "react-uuid": "^1.0.2",
     "swiper": "^8.1.4",
     "web3.storage": "^4.2.0"
   },

@@ -15,7 +15,7 @@ import 'swiper/css/navigation';
 import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
-  const {getAllAudio, loading} = useContext(UptuneContext);
+  const {getAllAudio, loading, getOneAudio, getArtistSongs} = useContext(UptuneContext);
 
   const [songs, setSongs] = useState([]);
 
@@ -81,6 +81,8 @@ export default function Home() {
         <ActionIcon variant='filled' radius='lg' sx={{position: 'absolute', right: 0, top: '40%', zIndex: 1000}} ref={nextEl}><CaretRight size={32} weight="fill" /></ActionIcon>
         <ActionIcon variant='filled' radius='lg' sx={{position: 'absolute', left: 0, top: '40%', zIndex: 1000}} ref={prevEl}><CaretLeft size={32} weight="fill" /></ActionIcon>
       </Swiper>
+      <Button onClick={() => getOneAudio("816512-41ba-f211-dc58-b20738f45a")}>getaudio</Button>
+      <Button onClick={() => getArtistSongs("0xbDA5747bFD65F08deb54cb465eB87D40e51B197E")}>getArtistSongs</Button>
     </>
   )
 }

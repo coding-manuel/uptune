@@ -1,5 +1,6 @@
 import React, {useEffect, useState} from "react"
-import { BigNumber, ethers } from 'ethers'
+import { ethers } from 'ethers'
+import uuid from 'react-uuid'
 import { Web3Storage } from 'web3.storage'
 import { useLocation } from 'react-router-dom';
 
@@ -15,6 +16,26 @@ const getEthereumContract = () =>{
     const uptuneContract = new ethers.Contract(contractAddress, contractABI, signer)
 
     return uptuneContract
+}
+
+const structureSongData = (audio) => {
+    const songData = {
+        id: Number(audio.id),
+        uuid: audio.uuid,
+        amount: ethers.utils.formatEther(audio.amount),
+        timestamp: new Date(audio.timestamp.toNumber() * 100).toLocaleString(),
+        wallet: audio.wallet,
+        mainArtist: audio.mainAuthor,
+        supportArtist: audio.authors,
+        title: audio.title,
+        moods: audio.tags,
+        genres: audio.genres,
+        coverartgateway: audio.coverartgateway,
+        audiogateway: audio.audiogateway,
+        comments: audio.comments
+    }
+
+    return songData
 }
 
 function makeGatewayURL(cid, path) {
@@ -97,20 +118,9 @@ export const UptuneProvider = ({children}) => {
 
             console.log(AllAudio)
 
-            const structuredAudio = AllAudio.map((audio) =>({
-                id: Number(audio.id),
-                amount: ethers.utils.formatEther(audio.amount),
-                timestamp: new Date(audio.timestamp.toNumber() * 100).toLocaleString(),
-                wallet: audio.wallet,
-                mainArtist: audio.mainAuthor,
-                supportArtist: audio.authors,
-                title: audio.title,
-                moods: audio.tags,
-                genres: audio.genres,
-                coverartgateway: audio.coverartgateway,
-                audiogateway: audio.audiogateway,
-                comments: audio.comments
-            }))
+            const structuredAudio = AllAudio.map((audio) => structureSongData(audio))
+
+            console.log(AllAudio, structuredAudio)
 
             setLoading(false)
 
@@ -121,10 +131,24 @@ export const UptuneProvider = ({children}) => {
         }
     }
 
-    const getOneAudio = async () =>{
+    const getOneAudio = async (uuid) =>{
         try {
             const transactionContract = getEthereumContract()
-            const all = await transactionContract.getOneAudio(1)
+            const all = await transactionContract.getOneAudio(uuid)
+
+            const structuredAudio = structureSongData(all)
+
+            console.log(structuredAudio)
+        } catch (error) {
+            console.log(error)
+        }
+    }
+
+    const getArtistSongs = async (address) =>{
+        try {
+            console.log(address)
+            const transactionContract = getEthereumContract()
+            const all = await transactionContract.getArtistSongs(address)
 
             console.log(all)
         } catch (error) {
@@ -153,7 +177,7 @@ export const UptuneProvider = ({children}) => {
             //*send to blockchain
             setLoadingStatus("Uploading to the Blockchain")
             const transactionContract = getEthereumContract()
-            const transactionHash = await transactionContract.uploadAudio(audioGateway, coverartGateway, files.mainArtist, files.title, files.moods, files.genres, files.supportArtist)
+            const transactionHash = await transactionContract.uploadAudio(uuid(), audioGateway, coverartGateway, files.mainArtist, files.title, files.moods, files.genres, files.supportArtist)
 
             setLoadingStatus("Waiting to confirm Transaction")
             const transactionReceipt = await transactionHash.wait();
@@ -220,6 +244,9 @@ export const UptuneProvider = ({children}) => {
     }
 
     const checkIfUpload = () => {
+        const transactionContract = getEthereumContract()
+
+        console.log(transactionContract)
         if(location.pathname === '/upload')
             setUpload(true)
         else
@@ -234,7 +261,7 @@ export const UptuneProvider = ({children}) => {
     }, [])
 
     return(
-        <UptuneContext.Provider value={{checkIfUpload, upload, connectWallet, currentAccount, storage, uploadAudio, loading, loadingStatus, getAllAudio, getOneAudio, error, setError, sendTip, tipLoading, setTipLoading, setCommentLoading, commentLoading, getAllComments}}>
+        <UptuneContext.Provider value={{checkIfUpload, upload, connectWallet, currentAccount, storage, uploadAudio, loading, loadingStatus, getAllAudio, getOneAudio, error, setError, sendTip, tipLoading, setTipLoading, setCommentLoading, commentLoading, getAllComments, getArtistSongs}}>
             {children}
         </UptuneContext.Provider>
     )
