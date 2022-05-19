@@ -6,13 +6,10 @@ import { Navigation } from 'swiper';
 import { showNotification } from '@mantine/notifications';
 
 import { UptuneContext } from '../context/UptuneContext'
-import TipModal from '../components/TipModal';
 import SongThumb from '../components/SongThumb';
-import CommentDrawer from '../components/CommentDrawer';
 
 import 'swiper/css';
 import 'swiper/css/navigation';
-import { useNavigate } from 'react-router-dom';
 
 export default function Home() {
   const {getAllAudio, loading, getOneAudio, getArtistSongs} = useContext(UptuneContext);
@@ -34,8 +31,6 @@ export default function Home() {
   return (
     <>
       <LoadingOverlay visible={loading} />
-      <CommentDrawer songData={songs} />
-      <TipModal />
       <Swiper
         style={{zIndex: 0}}
         modules={[Navigation]}

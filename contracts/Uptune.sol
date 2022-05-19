@@ -5,14 +5,22 @@ contract Uptune {
   uint public audioCount = 0;
   mapping(uint => Audio) public audios;
   mapping(uint => Comment) public comments;
+  mapping(address => Artist) public artists;
   mapping(string => uint) public uuidToId;
-  mapping(address => string[]) public artistSongs;
 
   struct Comment {
     uint id;
     string[] comment;
     uint[] amount;
     uint256[] timestamp;
+  }
+
+  struct Artist {
+    address id;
+    string[] songs;
+    string artistID;
+    string artist;
+    string profilegateway;
   }
 
   struct Audio {
@@ -57,7 +65,7 @@ contract Uptune {
 
     uuidToId[_uuid] = audioCount;
 
-    artistSongs[msg.sender].push(_uuid);
+    artists[msg.sender].songs.push(_uuid);
 
     emit AudioUploaded(audioCount, _uuid, 0, block.timestamp, msg.sender, _audiogateway, _coverartgateway, _title, _mainAuthor, _tags, _genres, _authors);
   }
@@ -78,11 +86,18 @@ contract Uptune {
     return comments[_id];
   }
 
-  function getArtistSongs(address _add) public view returns(string[] memory){
-    return artistSongs[_add];
+  function getArtist(address _add) public view returns(Artist memory){
+    return artists[_add];
   }
 
-  function sendTip(uint _id, uint _amount, string memory _message) public{
+  function createArtist(string memory _artistID, string memory _artist, string memory _artistgateway) public {
+    artists[msg.sender].id = msg.sender;
+    artists[msg.sender].artistID = _artistID;
+    artists[msg.sender].artist = _artist;
+    artists[msg.sender].profilegateway = _artistgateway;
+  }
+
+  function sendTip(uint _id, uint _amount, string memory _message) public {
     audios[_id].amount += _amount;
 
     comments[_id].comment.push(_message);

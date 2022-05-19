@@ -80,12 +80,12 @@ export const UptuneProvider = ({children}) => {
         }
     }
 
-    const getAllComments = async () => {
+    const getAllComments = async (id) => {
         try {
             setCommentLoading(true)
 
             const transactionContract = getEthereumContract()
-            const AllComments = await transactionContract.getAllComments(1)
+            const AllComments = await transactionContract.getAllComments(id)
 
             const structuredComments = {
                 id: AllComments.id,
@@ -138,7 +138,7 @@ export const UptuneProvider = ({children}) => {
 
             const structuredAudio = structureSongData(all)
 
-            console.log(structuredAudio)
+            return structuredAudio
         } catch (error) {
             console.log(error)
         }

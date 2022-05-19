@@ -11,7 +11,7 @@ export default function SongThumb({ song }) {
   const handleClick = () => {
     console.log(song)
     setSongData(song)
-    navigate(`/song/${song.title}`)
+    navigate(`/song/${song.uuid}`)
   }
 
   return (

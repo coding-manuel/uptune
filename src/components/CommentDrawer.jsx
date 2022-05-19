@@ -35,7 +35,8 @@ export default function CommentDrawer({songData}) {
     useEffect(()=>{
         async function fetchComments() {
             let response = await getAllComments(songData.id)
-            setComments(response)
+            if(response)
+                setComments(response)
         }
         fetchComments()
     }, [commentDrawer])
