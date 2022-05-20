@@ -33,6 +33,7 @@ contract Uptune {
     string coverartgateway;
     string title;
     string mainAuthor;
+    string artistID;
     string[] tags;
     string[] genres;
     string authors;
@@ -41,19 +42,13 @@ contract Uptune {
   event AudioUploaded(
     uint id,
     string uuid,
-    uint amount,
-    uint256 timestamp,
-    address wallet,
-    string audiogateway,
-    string coverartgateway,
     string title,
     string mainAuthor,
-    string[] tags,
-    string[] genres,
+    string artistID,
     string authors
   );
 
-  function uploadAudio(string memory _uuid, string memory _audiogateway, string memory _coverartgateway, string memory _mainAuthor, string memory _title, string[] memory _tags, string[] memory _genres, string memory _authors) public {
+  function uploadAudio(string memory _uuid, string memory _audiogateway, string memory _coverartgateway, string memory _mainAuthor, string memory _artistID, string memory _title, string[] memory _tags, string[] memory _genres, string memory _authors) public {
     require(bytes(_audiogateway).length > 0);
     require(bytes(_coverartgateway).length > 0);
     require(bytes(_title).length > 0);
@@ -61,13 +56,15 @@ contract Uptune {
 
     audioCount ++;
 
-    audios[audioCount] = Audio(audioCount, _uuid, 0, block.timestamp , msg.sender, _audiogateway, _coverartgateway, _title, _mainAuthor, _tags, _genres, _authors);
+    audios[audioCount] = Audio(audioCount, _uuid, 0, block.timestamp , msg.sender, _audiogateway, _coverartgateway, _title, _mainAuthor, "", _tags, _genres, _authors);
+    audios[audioCount].artistID = _artistID;
 
     uuidToId[_uuid] = audioCount;
 
     artists[msg.sender].songs.push(_uuid);
 
-    emit AudioUploaded(audioCount, _uuid, 0, block.timestamp, msg.sender, _audiogateway, _coverartgateway, _title, _mainAuthor, _tags, _genres, _authors);
+    emit AudioUploaded(audioCount, _uuid, _title, _mainAuthor, _artistID, _authors);
+
   }
 
   function getAllAudio() public view returns (Audio[] memory){

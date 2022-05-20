@@ -26,6 +26,7 @@ const structureSongData = (audio) => {
         timestamp: new Date(audio.timestamp.toNumber() * 100).toLocaleString(),
         wallet: audio.wallet,
         mainArtist: audio.mainAuthor,
+        artistID: audio.artistID,
         supportArtist: audio.authors,
         title: audio.title,
         moods: audio.tags,
@@ -222,10 +223,8 @@ export const UptuneProvider = ({children}) => {
         try {
             const transactionContract = getEthereumContract()
             const all = await transactionContract.getMultipleAudio(artist.artistSongs)
-            console.log(artist.artistSongs)
-            console.log(all)
 
-            const structuredAudio = all
+            const structuredAudio = all.map((audio) => structureSongData(audio))
 
             return structuredAudio
         } catch (error) {
@@ -266,7 +265,7 @@ export const UptuneProvider = ({children}) => {
             //*send to blockchain
             setLoadingStatus("Uploading to the Blockchain")
             const transactionContract = getEthereumContract()
-            const transactionHash = await transactionContract.uploadAudio(uuid(), audioGateway, coverartGateway, files.mainArtist, files.title, files.moods, files.genres, files.supportArtist)
+            const transactionHash = await transactionContract.uploadAudio(uuid(), audioGateway, coverartGateway, files.mainArtist, files.artistID, files.title, files.moods, files.genres, files.supportArtist)
 
             setLoadingStatus("Waiting to confirm Transaction")
             const transactionReceipt = await transactionHash.wait();

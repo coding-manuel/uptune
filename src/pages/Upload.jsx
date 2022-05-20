@@ -172,6 +172,7 @@ export default function Upload() {
         const audio = [new File(audioAccepted, `${name}.mp3`, {type:audioAccepted[0].type , lastModified:new Date()})]
 
         values.mainArtist = artistData.artistName
+        values.artistID = artistData.artistID
         values.genres = genres
         values.moods = tags
         values.audio = audio

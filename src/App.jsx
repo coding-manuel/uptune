@@ -11,6 +11,7 @@ import TipModal from './components/TipModal';
 import CommentDrawer from './components/CommentDrawer';
 import { UptuneContext } from './context/UptuneContext';
 import { MusicContext } from './context/MusicContext';
+import Artist from './pages/Artist';
 
 function App() {
   const {getAllAudio, loading, getOneAudio, getArtistSongs} = useContext(UptuneContext);
@@ -33,6 +34,7 @@ function App() {
       <Routes>
         <Route path='home' element={<Home />} />
         <Route path='upload' element={<Upload />} />
+        <Route path='artist/:id' element={<Artist />} />
         <Route path='song/:id' element={<Song />} />
       </Routes>
     </Layout>

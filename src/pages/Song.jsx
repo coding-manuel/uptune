@@ -1,7 +1,7 @@
 import React, { useEffect, useState, useContext } from 'react'
 import { Stack, Box, Tooltip, Group, Text, Image, Title, ActionIcon, Badge, MediaQuery } from '@mantine/core';
 import { ShareNetwork } from 'phosphor-react';
-import { useParams } from 'react-router-dom'
+import { useNavigate, useParams } from 'react-router-dom'
 
 import { MusicContext } from '../context/MusicContext';
 import { UptuneContext } from "../context/UptuneContext"
@@ -29,6 +29,7 @@ const IconButton = ({ type }) => {
   }
 
 export default function Song() {
+    const navigate = useNavigate()
     const {setSongData} = useContext(MusicContext)
     const {getOneAudio, getArtistSongs} = useContext(UptuneContext);
     const {id} = useParams()
@@ -46,7 +47,7 @@ export default function Song() {
     }
 
     const handleArtistClick = () => {
-        getArtistSongs(songInfo.wallet)
+        navigate(`/artist/${songInfo.wallet}`)
     }
 
     useEffect(()=>{
@@ -77,7 +78,7 @@ export default function Song() {
                 </Tooltip>
                 <Stack sx={{maxWidth: '90%', gap: 4}}>
                     <Title order={4} sx={{color: 'white'}}>{songInfo.title}</Title>
-                    <Text size='md' onClick={handleArtistClick} variant="link" weight={500} sx={{paddingRight: 15, whiteSpace: 'noWrap', overflow: 'hidden',  textOverflow: 'ellipsis', color: 'white'}}>{songInfo.mainArtist}{songInfo.supportArtist != [] && ',' + songInfo.supportArtist}</Text>
+                    <Text size='md' onClick={handleArtistClick} variant="link" weight={500} sx={{cursor: 'pointer', paddingRight: 15, whiteSpace: 'noWrap', overflow: 'hidden',  textOverflow: 'ellipsis', color: 'white'}}>{songInfo.mainArtist}{songInfo.supportArtist != [] && ',' + songInfo.supportArtist}</Text>
                     <Group pt={24}>
                         {songInfo && songInfo.genres.map((genre) => <Badge sx={{cursor: 'pointer'}}>{genre}</Badge>)}
                     </Group>
