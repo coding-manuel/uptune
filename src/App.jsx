@@ -14,7 +14,6 @@ import { MusicContext } from './context/MusicContext';
 import Artist from './pages/Artist';
 
 function App() {
-  const {getAllAudio, loading, getOneAudio, getArtistSongs} = useContext(UptuneContext);
   const {songData} = useContext(MusicContext);
 
   setInterval(() => {

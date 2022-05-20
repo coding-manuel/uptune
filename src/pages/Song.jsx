@@ -31,7 +31,7 @@ const IconButton = ({ type }) => {
 export default function Song() {
     const navigate = useNavigate()
     const {setSongData} = useContext(MusicContext)
-    const {getOneAudio, getArtistSongs} = useContext(UptuneContext);
+    const {getOneAudio} = useContext(UptuneContext);
     const {id} = useParams()
 
     const [songInfo, setSongInfo] = useState(false);
