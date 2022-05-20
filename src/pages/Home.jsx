@@ -12,7 +12,7 @@ import 'swiper/css';
 import 'swiper/css/navigation';
 
 export default function Home() {
-  const {getAllAudio, loading, getMultipleAudio, artist} = useContext(UptuneContext);
+  const {getAllAudio, loading} = useContext(UptuneContext);
 
   const [songs, setSongs] = useState([]);
 
@@ -76,7 +76,6 @@ export default function Home() {
         <ActionIcon variant='filled' radius='lg' sx={{position: 'absolute', right: 0, top: '40%', zIndex: 1000}} ref={nextEl}><CaretRight size={32} weight="fill" /></ActionIcon>
         <ActionIcon variant='filled' radius='lg' sx={{position: 'absolute', left: 0, top: '40%', zIndex: 1000}} ref={prevEl}><CaretLeft size={32} weight="fill" /></ActionIcon>
       </Swiper>
-      <Button onClick={() => getMultipleAudio(artist)}>getArtistSongs</Button>
     </>
   )
 }
