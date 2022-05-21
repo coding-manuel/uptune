@@ -55,9 +55,9 @@ function makeGatewayURL(cid, path) {
 }
 
 export const UptuneProvider = ({children}) => {
-    const [currentAccount, setCurrentAccount] = useState('')
-    const [artistExist, setArtistExist] = useState(false);
-    const [artist, setArtist] = useState({});
+    const [currentAccount, setCurrentAccount] = useState(localStorage.getItem("currentAccount") || "")
+    const [artistExist, setArtistExist] = useState(localStorage.getItem("artistExist") || false);
+    const [artist, setArtist] = useState(localStorage.getItem("artist"), {});
     const [storage, setStorage] = useState('');
     const [error, setError] = useState([]);
     const [upload, setUpload] = useState(false);
@@ -85,6 +85,7 @@ export const UptuneProvider = ({children}) => {
 
             if(accounts.length){
                 setCurrentAccount(accounts[0])
+                localStorage.setItem("currentAccount", accounts[0])
             }else{
                 setError([true, "Connect Wallet"])
             }
@@ -107,6 +108,8 @@ export const UptuneProvider = ({children}) => {
             if(exists){
                 const artist = await getArtist(currentAccount)
                 setArtist(artist)
+                localStorage.setItem("artist", artist)
+                localStorage.setItem("artistExist", exists)
             }
 
         } catch (error) {
@@ -333,12 +336,12 @@ export const UptuneProvider = ({children}) => {
 
     useEffect(() =>{
         connectToIPFS()
-        checkIfWalletIsConnected()
-        checkIfArtistCreated()
+        !currentAccount && checkIfWalletIsConnected()
+        artistExist && checkIfArtistCreated()
     }, [currentAccount])
 
     return(
-        <UptuneContext.Provider value={{connectWallet, currentAccount, storage, uploadAudio, loading, loadingStatus, getAllAudio, getOneAudio, getMultipleAudio, error, setError, sendTip, tipLoading, setTipLoading, setCommentLoading, commentLoading, getAllComments, getArtistSongs, getArtist, createArtist, artistExist, artist, mainLoader}}>
+        <UptuneContext.Provider value={{connectWallet, currentAccount, storage, uploadAudio, loading, loadingStatus, getAllAudio, getOneAudio, getMultipleAudio, error, setError, sendTip, tipLoading, setTipLoading, setCommentLoading, commentLoading, getAllComments, getArtistSongs, getArtist, createArtist, artistExist, artist, mainLoader, setMainLoader}}>
             {children}
         </UptuneContext.Provider>
     )

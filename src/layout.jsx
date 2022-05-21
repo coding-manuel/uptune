@@ -19,9 +19,12 @@ import CreateArtist from "./components/CreateArtist"
 
 export default function Layout({ children }) {
   const {artistExist, currentAccount, loading, connectWallet, mainLoader} = useContext(UptuneContext);
-  const location = useLocation()
   const theme = useMantineTheme();
-  const [opened, setOpened] = useState(false);
+  const [localMainLoader, setLocalMainLoader] = useState(false);
+
+  useEffect(()=>{
+    setLocalMainLoader(mainLoader)
+  }, [mainLoader])
 
   return (
     <AppShell
@@ -35,7 +38,7 @@ export default function Layout({ children }) {
       footer={<Player />}
       header={<Navbar />}
     >
-      <LoadingOverlay visible={mainLoader} />
+      <LoadingOverlay loaderProps={{ size: 'sm' }} overlayOpacity={.9} transitionDuration={500} visible={localMainLoader} />
       <Container size='lg' pb={100} >
         {!currentAccount ? <Modal
           overlayOpacity={0.55}

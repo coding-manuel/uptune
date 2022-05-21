@@ -31,7 +31,7 @@ const IconButton = ({ type }) => {
 export default function Song() {
     const navigate = useNavigate()
     const {setSongData} = useContext(MusicContext)
-    const {getOneAudio} = useContext(UptuneContext);
+    const {getOneAudio, setMainLoader} = useContext(UptuneContext);
     const {id} = useParams()
 
     const [songInfo, setSongInfo] = useState(false);
@@ -51,11 +51,15 @@ export default function Song() {
     }
 
     useEffect(()=>{
+        setMainLoader(true)
         async function fetchSongs() {
             let uuid = id
             let response = await getOneAudio(uuid)
             setSongInfo(response)
             setSongData(response)
+            setTimeout(() => {
+                setMainLoader(false)
+            }, 500);
         }
         fetchSongs()
       }, [])
