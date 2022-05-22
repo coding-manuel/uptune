@@ -83,9 +83,9 @@ export default function Navbar() {
               <Plus size={24} weight="fill" />
             </ActionIcon>
           </Tooltip>
-          <Menu placement='end' closeOnItemClick={false} control={<Avatar sx={{cursor: "pointer"}} size='sm' src={artist.profilegateway} alt={artist.artistName} />}>
+          <Menu placement='end' closeOnItemClick={false} control={<Avatar sx={{cursor: "pointer"}} size='sm' src={artist.profilegateway} alt={artist.artistName} />} styles={{itemLabel: {width: '100%'}}}>
             <Menu.Item component={Link} to={`/artist/${currentAccount}`} icon={<User size={16} weight="regular" />}>Your Profile</Menu.Item>
-            <Menu.Item styles={{itemLabel: {width: '100%'}}} icon={<MoonStars size={16} weight="regular" />}><Switch checked={checked} onChange={handleToggle} styles={{root:{flexDirection: 'row-reverse', justifyContent: 'space-between', width: '100%'}, label:{paddingLeft: 0, paddingRight: 8}}} label="Dark Mode" /></Menu.Item>
+            <Menu.Item icon={<MoonStars size={16} weight="regular" />}><Switch checked={checked} onChange={handleToggle} styles={{root:{flexDirection: 'row-reverse', justifyContent: 'space-between', width: '100%'}, label:{paddingLeft: 0, paddingRight: 8}}} label="Dark Mode" /></Menu.Item>
           </Menu>
         </Group>
       </Container>
