@@ -78,7 +78,7 @@ export default function Song() {
                     withArrow
                     gutter={10}
                 >
-                    <Image src={songInfo.coverartgateway} onClick={handleShare} sx={{maxWidth: 200, cursor:"pointer"}} radius='sm' alt={songInfo.title}/>
+                    <Image withPlaceholder src={songInfo.coverartgateway} onClick={handleShare} sx={{maxWidth: 200, cursor:"pointer"}} radius='sm' alt={songInfo.title}/>
                 </Tooltip>
                 <Stack sx={{maxWidth: '90%', gap: 4}}>
                     <Title order={4} sx={{color: 'white'}}>{songInfo.title}</Title>
