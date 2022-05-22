@@ -4,8 +4,9 @@ import { createStyles, Menu, Header, ActionIcon, Container, Group, Avatar, Toolt
 import { UptuneContext } from '../context/UptuneContext'
 import { Plus, User } from "phosphor-react"
 
-import { shortenAddress } from '../utils/shortenAddress'
-import Logo from "../assets/Logo_White.svg";
+import LogoWhite from "../assets/Logo_White.svg";
+import Logo from "../assets/Logo.svg"
+import { useColorScheme } from '@mantine/hooks';
 
 const HEADER_HEIGHT = 60;
 
@@ -50,6 +51,7 @@ export default function Navbar() {
   const { classes, cx } = useStyles();
   const [artistData, setArtistData] = useState({});
   const navigate = useNavigate()
+  const colorScheme = useColorScheme();
 
   const handleLogoClick = () => {
     navigate("/home")
@@ -62,7 +64,7 @@ export default function Navbar() {
   return (
     <Header fixed height={HEADER_HEIGHT} className={classes.root}>
       <Container size='lg' className={classes.header}>
-        <img onClick={handleLogoClick} style={{height: 30, cursor: "pointer"}} src={Logo} alt="" />
+        <img onClick={handleLogoClick} style={{height: 30, cursor: "pointer"}} src={colorScheme == 'dark' ? Logo: LogoWhite} alt="" />
         <Group spacing={24}>
           <Tooltip
             label={<Text size='xs' weight={600}>Upload</Text>}

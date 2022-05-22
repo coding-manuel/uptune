@@ -1,13 +1,11 @@
 export const theme = {
-    colorScheme: 'dark',
+    colorScheme: 'light',
     shadows: {
       md: '1px 1px 3px rgba(0,0,0,.25)',
       xl: '5px 5px 3px rgba(0,0,0,.25)',
     },
     primaryColor: 'red',
     primaryShade: 8,
-
-    white: "#ffffff",
 
     lineHeight: 1.3,
     headings: {
