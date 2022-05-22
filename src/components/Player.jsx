@@ -9,9 +9,15 @@ import './player.css'
 
 import { MusicContext } from '../context/MusicContext';
 import { useMediaQuery } from '@mantine/hooks';
+import { useNavigate } from 'react-router-dom';
 
 const Playing = ({songInfo, matches}) => {
   const mobile = useMediaQuery('(max-width: 500px)');
+  const navigate = useNavigate()
+
+  const handleArtistClick = () => {
+    navigate(`/artist/${songInfo.wallet}`)
+  }
 
   return(
     <Group noWrap mx={20} spacing='md'>
@@ -20,8 +26,8 @@ const Playing = ({songInfo, matches}) => {
         {songInfo.length !== 0 &&
           <>
             <Text size='md' weight={700} sx={{paddingRight: 15, whiteSpace: 'noWrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{songInfo.title}</Text>
-            {matches ? <Marquee pauseOnHover gradient={false}><Text size='sm' weight={400}>{songInfo.mainArtist}{songInfo.supportArtist != [] && ',' + songInfo.supportArtist}</Text></Marquee> :
-            <Text size='sm' weight={400} sx={{paddingRight: 15, whiteSpace: 'noWrap', overflow: 'hidden'}}>{songInfo.mainArtist}{songInfo.supportArtist != [] && ', ' + songInfo.supportArtist}</Text>
+            {matches ? <Marquee pauseOnHover gradient={false}><Text sx={{color: 'inherit', cursor: 'pointer'}} onClick={handleArtistClick} variant="link" size='sm' weight={400}>{songInfo.mainArtist}{songInfo.supportArtist != [] && ',' + songInfo.supportArtist}</Text></Marquee> :
+            <Text onClick={handleArtistClick} variant="link" size='sm' weight={400} sx={{paddingRight: 15, whiteSpace: 'noWrap', overflow: 'hidden', color: 'inherit', cursor: 'pointer'}}>{songInfo.mainArtist}{songInfo.supportArtist != [] && ', ' + songInfo.supportArtist}</Text>
             }
           </>
         }
