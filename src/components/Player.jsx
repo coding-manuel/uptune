@@ -47,9 +47,9 @@ const IconButton = ({ setOpen, type, matches }) => {
       >
         <ActionIcon styles={{root: {'&:hover' : {backgroundColor: "#141517"}}}} p={4} sx={{width: "initial", height: "initial"}}>
           {type === 'Comments' ?
-          <Chats style={{color: '#ffffff'}} size={24} weight="fill" />
+          <Chats color='#ffffff' size={24} weight="fill" />
           :
-          <CurrencyEth style={{color: '#ffffff'}} size={24} weight="fill" />
+          <CurrencyEth color='#ffffff' size={24} weight="fill" />
           }
         </ActionIcon>
       </Tooltip>
