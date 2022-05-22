@@ -19,7 +19,6 @@ export const coverArtChildren = (file, scale, editor) => (
             rotate={0}
             border={0}
             ref={editor}
-            onClick={()=>console.log("fkjdxhfgk")}
         />
         :
         <>
@@ -34,7 +33,6 @@ export const coverArtChildren = (file, scale, editor) => (
 
 export default function CreateArtist() {
     const {loading, createArtist} = useContext(UptuneContext);
-    const [artistExist, setArtistExist] = useState(false);
     const [coverDropLoad, setCoverDropLoad] = useState(false);
     const [artAccepted, setArtAccepted] = useState(false)
     const [scale, setScale] = useState(1);
@@ -90,7 +88,6 @@ export default function CreateArtist() {
 
         const options = {
             maxSizeMB: 2,
-            maxWidthOrHeight: 250,
             useWebWorker: true,
         }
 

@@ -20,7 +20,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <UptuneProvider>
       <MusicProvider>
-        <MantineProvider theme={theme} withGlobalStyles withNormalizeCSS>
+        <MantineProvider theme={theme} styles={{ Title: { root: { color: "#ffffff"} } }} withGlobalStyles withNormalizeCSS>
           <NotificationsProvider>
             <App />
           </NotificationsProvider>

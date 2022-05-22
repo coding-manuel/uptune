@@ -7,6 +7,8 @@ export const theme = {
     primaryColor: 'red',
     primaryShade: 8,
 
+    white: "#ffffff",
+
     lineHeight: 1.3,
     headings: {
       fontFamily: 'Sora, sans-serif',
