@@ -1,8 +1,8 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { createStyles, Header, ActionIcon, Container, Group, Avatar, Tooltip, Text } from '@mantine/core';
+import { createStyles, Menu, Header, ActionIcon, Container, Group, Avatar, Tooltip, Text } from '@mantine/core';
 import { UptuneContext } from '../context/UptuneContext'
-import { Plus } from "phosphor-react"
+import { Plus, User } from "phosphor-react"
 
 import { shortenAddress } from '../utils/shortenAddress'
 import Logo from "../assets/Logo_White.svg";
@@ -73,7 +73,9 @@ export default function Navbar() {
               <Plus size={24} weight="fill" />
             </ActionIcon>
           </Tooltip>
-          <Avatar sx={{cursor: "pointer"}} size='sm' src={artist.profilegateway} alt={artist.artistName} />
+          <Menu placement='end' control={<Avatar sx={{cursor: "pointer"}} size='sm' src={artist.profilegateway} alt={artist.artistName} />}>
+            <Menu.Item component={Link} to={`/artist/${currentAccount}`} icon={<User size={16} weight="regular" />}>Your Profile</Menu.Item>
+          </Menu>
         </Group>
       </Container>
     </Header>
