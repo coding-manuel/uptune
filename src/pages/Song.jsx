@@ -81,10 +81,10 @@ export default function Song() {
                     <Image withPlaceholder src={songInfo.coverartgateway} onClick={handleShare} sx={{maxWidth: 200, cursor:"pointer"}} radius='sm' alt={songInfo.title}/>
                 </Tooltip>
                 <Stack sx={{maxWidth: '90%', gap: 4}}>
-                    <Title order={4}>{songInfo.title}</Title>
+                    <Title sx={{color: 'inherit'}} order={4}>{songInfo.title}</Title>
                     <Text size='md' onClick={handleArtistClick} variant="link" weight={500} sx={{cursor: 'pointer', paddingRight: 15, whiteSpace: 'noWrap', overflow: 'hidden',  textOverflow: 'ellipsis', color: 'inherit'}}>{songInfo.mainArtist}{songInfo.supportArtist != [] && ',' + songInfo.supportArtist}</Text>
                     <Group pt={24}>
-                        {songInfo && songInfo.genres.map((genre) => <Badge sx={{cursor: 'pointer'}}>{genre}</Badge>)}
+                        {songInfo && songInfo.genres.map((genre) => <Badge variant='outline' sx={{cursor: 'pointer'}}>{genre}</Badge>)}
                     </Group>
                 </Stack>
             </Group>
