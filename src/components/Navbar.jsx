@@ -1,12 +1,11 @@
 import React, { useState, useContext, useEffect } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { createStyles, Menu, Header, ActionIcon, Container, Group, Avatar, Tooltip, Text } from '@mantine/core';
+import { createStyles, Menu, Header, ActionIcon, Container, Group, Avatar, Tooltip, Text, useMantineColorScheme, Switch } from '@mantine/core';
 import { UptuneContext } from '../context/UptuneContext'
-import { Plus, User } from "phosphor-react"
+import { Plus, User, MoonStars } from "phosphor-react"
 
 import LogoWhite from "../assets/Logo_White.svg";
 import Logo from "../assets/Logo.svg"
-import { useColorScheme } from '@mantine/hooks';
 
 const HEADER_HEIGHT = 60;
 
@@ -51,11 +50,20 @@ export default function Navbar() {
   const { classes, cx } = useStyles();
   const [artistData, setArtistData] = useState({});
   const navigate = useNavigate()
-  const colorScheme = useColorScheme();
+  const {colorScheme, toggleColorScheme} = useMantineColorScheme();
+
+  const [checked, setChecked] = useState(false);
 
   const handleLogoClick = () => {
     navigate("/home")
   }
+  const handleToggle = () => {
+    toggleColorScheme()
+  }
+
+  useEffect(()=>{
+    colorScheme === 'dark' ? setChecked(true) : setChecked(false)
+  }, [colorScheme])
 
   useEffect(()=>{
     setArtistData(artist)
@@ -64,7 +72,7 @@ export default function Navbar() {
   return (
     <Header fixed height={HEADER_HEIGHT} className={classes.root}>
       <Container size='lg' className={classes.header}>
-        <img onClick={handleLogoClick} style={{height: 30, cursor: "pointer"}} src={colorScheme == 'dark' ? Logo: LogoWhite} alt="" />
+        <img onClick={handleLogoClick} style={{height: 30, cursor: "pointer"}} src={colorScheme == 'dark' ? LogoWhite: Logo} alt="" />
         <Group spacing={24}>
           <Tooltip
             label={<Text size='xs' weight={600}>Upload</Text>}
@@ -75,8 +83,9 @@ export default function Navbar() {
               <Plus size={24} weight="fill" />
             </ActionIcon>
           </Tooltip>
-          <Menu placement='end' control={<Avatar sx={{cursor: "pointer"}} size='sm' src={artist.profilegateway} alt={artist.artistName} />}>
+          <Menu placement='end' closeOnItemClick={false} control={<Avatar sx={{cursor: "pointer"}} size='sm' src={artist.profilegateway} alt={artist.artistName} />}>
             <Menu.Item component={Link} to={`/artist/${currentAccount}`} icon={<User size={16} weight="regular" />}>Your Profile</Menu.Item>
+            <Menu.Item styles={{itemLabel: {width: '100%'}}} icon={<MoonStars size={16} weight="regular" />}><Switch checked={checked} onChange={handleToggle} styles={{root:{flexDirection: 'row-reverse', justifyContent: 'space-between', width: '100%'}, label:{paddingLeft: 0, paddingRight: 8}}} label="Dark Mode" /></Menu.Item>
           </Menu>
         </Group>
       </Container>

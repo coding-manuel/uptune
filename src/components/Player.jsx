@@ -8,11 +8,12 @@ import 'react-h5-audio-player/lib/styles.css';
 import './player.css'
 
 import { MusicContext } from '../context/MusicContext';
-import { useMediaQuery } from '@mantine/hooks';
+import { useColorScheme, useMediaQuery } from '@mantine/hooks';
 import { useNavigate } from 'react-router-dom';
 
 const Playing = ({songInfo, matches}) => {
   const mobile = useMediaQuery('(max-width: 500px)');
+  const colorScheme = useColorScheme()
   const navigate = useNavigate()
 
   const handleArtistClick = () => {
@@ -25,9 +26,9 @@ const Playing = ({songInfo, matches}) => {
       <Stack style={{width: mobile ? '100px' : '150px'}} sx={{gap: 0}}>
         {songInfo.length !== 0 &&
           <>
-            <Text size='md' weight={700} sx={{paddingRight: 15, whiteSpace: 'noWrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{songInfo.title}</Text>
-            {matches ? <Marquee pauseOnHover gradient={false}><Text sx={{color: 'inherit', cursor: 'pointer'}} onClick={handleArtistClick} variant="link" size='sm' weight={400}>{songInfo.mainArtist}{songInfo.supportArtist != [] && ',' + songInfo.supportArtist}</Text></Marquee> :
-            <Text onClick={handleArtistClick} variant="link" size='sm' weight={400} sx={{paddingRight: 15, whiteSpace: 'noWrap', overflow: 'hidden', color: 'inherit', cursor: 'pointer'}}>{songInfo.mainArtist}{songInfo.supportArtist != [] && ', ' + songInfo.supportArtist}</Text>
+            <Text size='md' weight={700} sx={{color: '#C1C2C5', paddingRight: 15, whiteSpace: 'noWrap', overflow: 'hidden', textOverflow: 'ellipsis'}}>{songInfo.title}</Text>
+            {matches ? <Marquee pauseOnHover gradient={false}><Text sx={{color: '#C1C2C5', cursor: 'pointer'}} onClick={handleArtistClick} variant="link" size='sm' weight={400}>{songInfo.mainArtist}{songInfo.supportArtist != [] && ',' + songInfo.supportArtist}</Text></Marquee> :
+            <Text onClick={handleArtistClick} variant="link" size='sm' weight={400} sx={{paddingRight: 15, whiteSpace: 'noWrap', overflow: 'hidden', color: '#C1C2C5', cursor: 'pointer'}}>{songInfo.mainArtist}{songInfo.supportArtist != [] && ', ' + songInfo.supportArtist}</Text>
             }
           </>
         }
