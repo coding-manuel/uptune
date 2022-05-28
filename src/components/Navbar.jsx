@@ -46,7 +46,7 @@ const useStyles = createStyles((theme) => ({
 }));
 
 export default function Navbar() {
-  const {currentAccount, connectWallet, artist} = useContext(UptuneContext);
+  const {currentAccount, artist} = useContext(UptuneContext);
   const { classes, cx } = useStyles();
   const [artistData, setArtistData] = useState({});
   const navigate = useNavigate()
@@ -57,6 +57,7 @@ export default function Navbar() {
   const handleLogoClick = () => {
     navigate("/home")
   }
+
   const handleToggle = () => {
     toggleColorScheme()
   }

@@ -81,12 +81,17 @@ export const UptuneProvider = ({children}) => {
         try {
             if(!ethereum) return alert("Please Install MetaMask")
 
+
             const accounts = await ethereum.request({method: "eth_accounts"})
+            console.log(accounts)
 
             if(accounts.length){
                 setCurrentAccount(accounts[0])
                 localStorage.setItem("currentAccount", accounts[0])
             }else{
+                localStorage.setItem("artist", "")
+                localStorage.setItem("currentAccount", "")
+                localStorage.setItem("artistExist", false)
                 setError([true, "Connect Wallet"])
             }
         } catch (error) {
@@ -280,6 +285,7 @@ export const UptuneProvider = ({children}) => {
             setLoadingStatus(1)
 
             setLoading(false)
+
         } catch (error) {
             setLoading(false)
             console.log(error)
@@ -345,7 +351,7 @@ export const UptuneProvider = ({children}) => {
     }, [currentAccount])
 
     return(
-        <UptuneContext.Provider value={{connectWallet, currentAccount, storage, uploadAudio, loading, loadingStatus, getAllAudio, getOneAudio, getMultipleAudio, error, setError, sendTip, tipLoading, setTipLoading, setCommentLoading, commentLoading, getAllComments, getArtistSongs, getArtist, createArtist, artistExist, artist, mainLoader, setMainLoader}}>
+        <UptuneContext.Provider value={{connectWallet, currentAccount, storage, uploadAudio, loading, loadingStatus, setLoadingStatus, getAllAudio, getOneAudio, getMultipleAudio, error, setError, sendTip, tipLoading, setTipLoading, setCommentLoading, commentLoading, getAllComments, getArtistSongs, getArtist, createArtist, artistExist, artist, mainLoader, setMainLoader}}>
             {children}
         </UptuneContext.Provider>
     )

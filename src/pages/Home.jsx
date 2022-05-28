@@ -4,10 +4,12 @@ import { showNotification } from '@mantine/notifications';
 
 import SwiperComp from '../components/SwiperComp';
 import { MusicContext } from '../context/MusicContext';
+import { UptuneContext } from '../context/UptuneContext';
 
 
 export default function Home() {
   const {AllSongs, fetchSongs} = useContext(MusicContext);
+  const {setLoadingStatus} = useContext(UptuneContext);
   const [loading, setLoading] = useState(true);
 
   const [songs, setSongs] = useState([]);
@@ -20,6 +22,7 @@ export default function Home() {
 
   useEffect(()=>{
     fetchSongs()
+    setLoadingStatus('')
   }, [])
 
 
