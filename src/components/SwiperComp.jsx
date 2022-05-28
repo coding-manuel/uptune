@@ -16,7 +16,7 @@ const SwiperComp = ({songs, label}) => {
 
     return (
     <>
-    {label && <Title order={5} pb={12}>{label}</Title>}
+    {label && <Title sx={{color: 'inherit'}} order={5} pb={12}>{label}</Title>}
     <Swiper
         style={{zIndex: 0}}
         modules={[Navigation]}
