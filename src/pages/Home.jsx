@@ -7,7 +7,7 @@ import { MusicContext } from '../context/MusicContext';
 
 
 export default function Home() {
-  const {AllSongs} = useContext(MusicContext);
+  const {AllSongs, fetchSongs} = useContext(MusicContext);
   const [loading, setLoading] = useState(true);
 
   const [songs, setSongs] = useState([]);
@@ -15,7 +15,12 @@ export default function Home() {
   useEffect(()=>{
     setSongs(AllSongs)
     setLoading(AllSongs.length == 0)
+    setLoading(false)
   }, [AllSongs])
+
+  useEffect(()=>{
+    fetchSongs()
+  }, [])
 
 
   return (

@@ -10,7 +10,7 @@ export const MusicProvider = ({children}) => {
     const [modalOpen, setModalOpen] = useState(false);
     const [commentDrawer, setCommentDrawer] = useState(false);
 
-    const fetchSongs = async() => {
+    const fetchSongs = async () => {
         let response = await getAllAudio()
         setAllSongs(response)
     }
@@ -20,7 +20,7 @@ export const MusicProvider = ({children}) => {
     }, [])
 
     return(
-        <MusicContext.Provider value={{songData, setSongData, modalOpen, setModalOpen, commentDrawer, setCommentDrawer, AllSongs}}>
+        <MusicContext.Provider value={{songData, setSongData, modalOpen, setModalOpen, commentDrawer, setCommentDrawer, AllSongs, fetchSongs}}>
             {children}
         </MusicContext.Provider>
     )

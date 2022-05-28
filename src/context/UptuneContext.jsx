@@ -103,6 +103,8 @@ export const UptuneProvider = ({children}) => {
             const transactionContract = getEthereumContract()
             const exists = await transactionContract.artistExists(currentAccount)
 
+            console.log(currentAccount, exists)
+
             setArtistExist(exists)
 
             if(exists){
@@ -163,6 +165,8 @@ export const UptuneProvider = ({children}) => {
             const transactionHash = await transactionContract.createArtist(uuid(), values.artist, profilegateway)
 
             const transactionReceipt = await transactionHash.wait();
+
+            console.log("sdfgklhsdjlk")
 
             const artist = await checkIfArtistCreated();
 
