@@ -70,7 +70,7 @@ export default function TipModal() {
                 <Stack sx={{gap: 2}}>
                     <Text size='md' weight={700}>{song.title}</Text>
                     <Text size='sm' weight={500} sx={{paddingRight: 15, whiteSpace: 'noWrap', overflow: 'hidden',  textOverflow: 'ellipsis'}}>{song.mainArtist}{song.supportArtist != [] && ',' + song.supportArtist}</Text>
-                    {tipLoading === 1 ? <Button>Sent<Check style={{paddingLeft: 4}} size={20} weight="fill" /></Button> :
+                    {tipLoading === 1 ? <Button my={24}>Sent<Check style={{paddingLeft: 4}} size={20} weight="fill" /></Button> :
                     <Stack my={24}>
                         <TextInput
                             placeholder="Boht Hard"
