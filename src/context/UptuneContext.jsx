@@ -10,7 +10,7 @@ export const UptuneContext = React.createContext()
 
 const { ethereum } = window
 
-const getEthereumContract = () =>{
+const getEthereumContract = async () => {
     const provider = new ethers.providers.Web3Provider(ethereum)
     const signer = provider.getSigner()
     const uptuneContract = new ethers.Contract(contractAddress, contractABI, signer)
@@ -79,6 +79,7 @@ export const UptuneProvider = ({children}) => {
 
     const checkIfWalletIsConnected = async () =>{
         try {
+
             if(!ethereum) return alert("Please Install MetaMask")
 
             const accounts = await ethereum.request({method: "eth_accounts"})
@@ -92,10 +93,9 @@ export const UptuneProvider = ({children}) => {
                 localStorage.setItem("artistExist", false)
                 setError([true, "Connect Wallet"])
             }
+
         } catch (error) {
             console.log(error)
-
-            throw new Error("No Ethereum Object")
         }
     }
 
@@ -103,7 +103,7 @@ export const UptuneProvider = ({children}) => {
         try {
             if(!ethereum) return alert("Please Install MetaMask")
 
-            const transactionContract = getEthereumContract()
+            const transactionContract = await getEthereumContract()
             const exists = await transactionContract.artistExists(currentAccount)
 
             console.log(currentAccount, exists)
@@ -119,8 +119,6 @@ export const UptuneProvider = ({children}) => {
 
         } catch (error) {
             console.log(error)
-
-            throw new Error("No Ethereum Object")
         }
     }
 
@@ -128,7 +126,7 @@ export const UptuneProvider = ({children}) => {
         try {
             setCommentLoading(true)
 
-            const transactionContract = getEthereumContract()
+            const transactionContract = await getEthereumContract()
             const AllComments = await transactionContract.getAllComments(id)
 
             const structuredComments = {
@@ -164,7 +162,7 @@ export const UptuneProvider = ({children}) => {
 
             const profilegateway = makeGatewayURL(profilehash, values.pf[0].name)
 
-            const transactionContract = getEthereumContract()
+            const transactionContract = await getEthereumContract()
             const transactionHash = await transactionContract.createArtist(uuid(), values.artist, profilegateway)
 
             const transactionReceipt = await transactionHash.wait();
@@ -183,7 +181,7 @@ export const UptuneProvider = ({children}) => {
 
     const getArtist = async (address) => {
         try {
-            const transactionContract = getEthereumContract()
+            const transactionContract = await getEthereumContract()
             const artist = await transactionContract.getArtist(address)
 
             const structuredArtist = structureArtistData(artist)
@@ -198,7 +196,7 @@ export const UptuneProvider = ({children}) => {
         try {
             setLoading(true)
 
-            const transactionContract = getEthereumContract()
+            const transactionContract = await getEthereumContract()
             const AllAudio = await transactionContract.getAllAudio()
 
             console.log(AllAudio)
@@ -218,7 +216,7 @@ export const UptuneProvider = ({children}) => {
 
     const getOneAudio = async (uuid) =>{
         try {
-            const transactionContract = getEthereumContract()
+            const transactionContract = await getEthereumContract()
             const all = await transactionContract.getOneAudio(uuid)
 
             const structuredAudio = structureSongData(all)
@@ -231,7 +229,7 @@ export const UptuneProvider = ({children}) => {
 
     const getMultipleAudio = async (artist) =>{
         try {
-            const transactionContract = getEthereumContract()
+            const transactionContract = await getEthereumContract()
             const all = await transactionContract.getMultipleAudio(artist.artistSongs)
 
             const structuredAudio = all.map((audio) => structureSongData(audio))
@@ -245,7 +243,7 @@ export const UptuneProvider = ({children}) => {
     const getArtistSongs = async (address) =>{
         try {
             console.log(address)
-            const transactionContract = getEthereumContract()
+            const transactionContract = await getEthereumContract()
             const all = await transactionContract.getArtistSongs(address)
 
             console.log(all)
@@ -274,7 +272,7 @@ export const UptuneProvider = ({children}) => {
 
             //*send to blockchain
             setLoadingStatus("Uploading to the Blockchain")
-            const transactionContract = getEthereumContract()
+            const transactionContract = await getEthereumContract()
             const transactionHash = await transactionContract.uploadAudio(uuid(), audioGateway, coverartGateway, files.mainArtist, files.artistID, files.title, files.moods, files.genres, files.supportArtist)
 
             setLoadingStatus("Waiting to confirm Transaction")
@@ -298,7 +296,7 @@ export const UptuneProvider = ({children}) => {
 
             const {id, tip, wallet, message} = values
 
-            const transactionContract = getEthereumContract()
+            const transactionContract = await getEthereumContract()
             let parsedAmount = ethers.utils.parseEther(tip.toString())
 
             await ethereum.request({
@@ -319,7 +317,6 @@ export const UptuneProvider = ({children}) => {
             console.log(error)
 
             setTipLoading(false)
-            throw new Error("No Ethereum Object")
         }
     }
 
@@ -336,16 +333,14 @@ export const UptuneProvider = ({children}) => {
         } catch (error) {
             setLoading(false)
             console.log(error)
-
-
-            throw new Error("No Ethereum Object")
         }
     }
 
     useEffect(() =>{
-        connectToIPFS()
-        !currentAccount && checkIfWalletIsConnected()
-        artistExist && checkIfArtistCreated()
+        if(checkIfWalletIsConnected()){
+            connectToIPFS()
+            artistExist && checkIfArtistCreated()
+        }
     }, [currentAccount])
 
     return(

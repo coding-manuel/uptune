@@ -15,9 +15,10 @@ export default function Home() {
   const [songs, setSongs] = useState([]);
 
   useEffect(()=>{
-    setSongs(AllSongs)
-    setLoading(AllSongs.length == 0)
-    setLoading(false)
+    if(AllSongs){
+      setSongs(AllSongs)
+      setLoading(false)
+    }
   }, [AllSongs])
 
   useEffect(()=>{
