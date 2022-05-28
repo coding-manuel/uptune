@@ -81,9 +81,7 @@ export const UptuneProvider = ({children}) => {
         try {
             if(!ethereum) return alert("Please Install MetaMask")
 
-
             const accounts = await ethereum.request({method: "eth_accounts"})
-            console.log(accounts)
 
             if(accounts.length){
                 setCurrentAccount(accounts[0])

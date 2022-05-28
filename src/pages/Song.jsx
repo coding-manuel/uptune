@@ -82,7 +82,7 @@ export default function Song() {
                 </Tooltip>
                 <Stack sx={{maxWidth: '90%', gap: 4}}>
                     <Title sx={{color: 'inherit'}} order={4}>{songInfo.title}</Title>
-                    <Text size='md' onClick={handleArtistClick} variant="link" weight={500} sx={{cursor: 'pointer', paddingRight: 15, whiteSpace: 'noWrap', overflow: 'hidden',  textOverflow: 'ellipsis', color: 'inherit'}}>{songInfo.mainArtist}{songInfo.supportArtist != [] && ',' + songInfo.supportArtist}</Text>
+                    <Text size='md' onClick={handleArtistClick} variant="link" weight={500} sx={{cursor: 'pointer', paddingRight: 15, whiteSpace: 'noWrap', overflow: 'hidden',  textOverflow: 'ellipsis', color: 'inherit'}}>{songInfo.mainArtist}{songInfo.supportArtist != [] && ', ' + songInfo.supportArtist}</Text>
                     <Group pt={24}>
                         {songInfo && songInfo.genres.map((genre) => <Badge variant='outline' sx={{cursor: 'pointer'}}>{genre}</Badge>)}
                     </Group>
