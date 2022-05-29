@@ -8,11 +8,12 @@ import Upload from './pages/Upload';
 import Layout from './layout';
 import Home from './pages/Home';
 import Song from './pages/Song';
+import Artist from './pages/Artist';
+import Genre from './pages/Genre';
 
 import TipModal from './components/TipModal';
 import CommentDrawer from './components/CommentDrawer';
 import { MusicContext } from './context/MusicContext';
-import Artist from './pages/Artist';
 
 function App() {
   const {songData} = useContext(MusicContext);
@@ -68,6 +69,7 @@ function App() {
             <Route path='upload' element={<Upload />} />
             <Route path='artist/:id' element={<Artist />} />
             <Route path='song/:id' element={<Song />} />
+            <Route path='genre/:genre' element={<Genre />} />
           </Routes>
         </Layout>
       </MantineProvider>

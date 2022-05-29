@@ -1,9 +1,16 @@
 import React from 'react';
 import { UnstyledButton, Box, Stack, Title, Group, Paper } from '@mantine/core';
+import { useNavigate } from 'react-router-dom';
 
 const StyledButton = ({genre}) => {
+    const navigate = useNavigate()
+
+    const handleClick = () => {
+        navigate(`/genre/${genre.toLowerCase()}`)
+    }
+
     return(
-        <UnstyledButton>
+        <UnstyledButton onClick={handleClick}>
             <Paper withBorder sx={{width: 100}} shadow="xs" p="xs">
                 <Title align='center' order={6}>{genre}</Title>
             </Paper>
