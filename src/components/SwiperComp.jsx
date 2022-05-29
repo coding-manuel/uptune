@@ -1,5 +1,5 @@
 import React ,{ useRef } from 'react';
-import { Title, ActionIcon } from '@mantine/core';
+import { Title, ActionIcon, Box } from '@mantine/core';
 import { Swiper, SwiperSlide } from 'swiper/react';
 import { CaretRight, CaretLeft } from "phosphor-react"
 import { Navigation } from 'swiper';
@@ -15,7 +15,7 @@ const SwiperComp = ({songs, label}) => {
     const prevEl = useRef(null)
 
     return (
-    <>
+    <Box mb={24}>
     {label && <Title sx={{color: 'inherit'}} order={5} pb={12}>{label}</Title>}
     <Swiper
         style={{zIndex: 0}}
@@ -62,7 +62,7 @@ const SwiperComp = ({songs, label}) => {
         <ActionIcon variant='filled' radius='lg' sx={{position: 'absolute', right: 0, top: '40%', zIndex: 1000}} ref={nextEl}><CaretRight size={32} weight="fill" /></ActionIcon>
         <ActionIcon variant='filled' radius='lg' sx={{position: 'absolute', left: 0, top: '40%', zIndex: 1000}} ref={prevEl}><CaretLeft size={32} weight="fill" /></ActionIcon>
       </Swiper>
-    </>
+    </Box>
     );
 }
 

@@ -6,6 +6,9 @@ export const MusicContext = React.createContext()
 export const MusicProvider = ({children}) => {
     const {getAllAudio} = useContext(UptuneContext);
     const [AllSongs, setAllSongs] = useState([]);
+
+    const [mostTipped, setMostTipped] = useState([]);
+
     const [songData, setSongData] = useState([]);
     const [modalOpen, setModalOpen] = useState(false);
     const [commentDrawer, setCommentDrawer] = useState(false);
@@ -15,12 +18,29 @@ export const MusicProvider = ({children}) => {
         setAllSongs(response)
     }
 
+    const createFilter = async () => {
+        let mostTippedSongs = []
+
+        if(AllSongs.length !== 0){
+            AllSongs.map((song) => {
+                if(parseInt(song.amount) > 3){
+                    mostTippedSongs.push(song)
+                }
+            })
+            setMostTipped(mostTippedSongs)
+        }
+    }
+
+    useEffect(()=>{
+        createFilter()
+    }, [AllSongs])
+
     useEffect(()=>{
         fetchSongs()
     }, [])
 
     return(
-        <MusicContext.Provider value={{songData, setSongData, modalOpen, setModalOpen, commentDrawer, setCommentDrawer, AllSongs, fetchSongs}}>
+        <MusicContext.Provider value={{songData, setSongData, modalOpen, setModalOpen, commentDrawer, setCommentDrawer, AllSongs, mostTipped, fetchSongs}}>
             {children}
         </MusicContext.Provider>
     )

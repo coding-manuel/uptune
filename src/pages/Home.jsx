@@ -1,22 +1,25 @@
 import React, {useContext, useState, useEffect} from 'react'
-import { LoadingOverlay, Button, ActionIcon } from '@mantine/core';
-import { showNotification } from '@mantine/notifications';
+import { LoadingOverlay, Stack } from '@mantine/core';
 
 import SwiperComp from '../components/SwiperComp';
 import { MusicContext } from '../context/MusicContext';
 import { UptuneContext } from '../context/UptuneContext';
+import GenreComp from '../components/GenreComp';
 
 
 export default function Home() {
-  const {AllSongs, fetchSongs} = useContext(MusicContext);
+  const {AllSongs, fetchSongs, mostTipped} = useContext(MusicContext);
   const {setLoadingStatus} = useContext(UptuneContext);
   const [loading, setLoading] = useState(true);
+  const [mostTippedList, setMostTippedList] = useState([]);
 
-  const [songs, setSongs] = useState([]);
+  useState(() => {
+    setMostTippedList(mostTipped)
+    console.log(mostTipped)
+  }, [mostTipped])
 
   useEffect(()=>{
     if(AllSongs){
-      setSongs(AllSongs)
       setLoading(false)
     }
   }, [AllSongs])
@@ -30,8 +33,8 @@ export default function Home() {
   return (
     <>
       <LoadingOverlay visible={loading} />
-      {!loading && <SwiperComp label="Trending Now" songs={songs} />}
-      {!loading && <SwiperComp label="Trending Now" songs={songs} />}
+      {!loading && <SwiperComp label="Most Tipped" songs={mostTipped} />}
+      {!loading && <GenreComp label="Browse by Genre" />}
     </>
   )
 }
