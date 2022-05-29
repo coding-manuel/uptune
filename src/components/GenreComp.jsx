@@ -12,7 +12,7 @@ const StyledButton = ({genre}) => {
     return(
         <UnstyledButton onClick={handleClick}>
             <Paper withBorder sx={{width: 100}} shadow="xs" p="xs">
-                <Title align='center' order={6}>{genre}</Title>
+                <Title sx={{color: 'inherit'}} align='center' order={6}>{genre}</Title>
             </Paper>
         </UnstyledButton>
     )
