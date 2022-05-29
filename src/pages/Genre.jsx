@@ -18,7 +18,7 @@ export default function Genre() {
 
     return (
         <>
-            <Title order={5}><span style={{color: theme.colors.red[7]}}>{genre.charAt(0).toUpperCase() + genre.slice(1)}</span> Songs</Title>
+            <Title sx={{color: 'inherit'}} order={5}><span style={{color: theme.colors.red[7]}}>{genre.charAt(0).toUpperCase() + genre.slice(1)}</span> Songs</Title>
 
             <Group my={12} position='center' grow>
                 {Object.keys(localGenreList).length !== 0 && localGenreList[genre].map((song) => {
