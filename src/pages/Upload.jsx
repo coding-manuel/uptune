@@ -47,7 +47,7 @@ export const audioChildren = (file) => (
     </Group>
 )
 
-const moods = ['Happy', 'Exuberant', 'Energetic', 'Party', 'Commute', 'Chill', 'Romance']
+const moods = ['Happy', 'Exuberant', 'Energetic', 'Party', 'Gym', 'Chill', 'Romance']
 const genresList = ['Hip-Hop', 'Dubstep', 'EDM', 'Pop', 'Hindi', 'Tamil', 'Metal']
 
 export default function Upload() {
