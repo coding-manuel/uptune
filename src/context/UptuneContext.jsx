@@ -106,8 +106,6 @@ export const UptuneProvider = ({children}) => {
             const transactionContract = await getEthereumContract()
             const exists = await transactionContract.artistExists(currentAccount)
 
-            console.log(currentAccount, exists)
-
             setArtistExist(exists)
 
             if(exists){
@@ -199,11 +197,9 @@ export const UptuneProvider = ({children}) => {
             const transactionContract = await getEthereumContract()
             const AllAudio = await transactionContract.getAllAudio()
 
-            console.log(AllAudio)
-
             const structuredAudio = AllAudio.map((audio) => structureSongData(audio))
 
-            console.log(AllAudio, structuredAudio)
+            console.log(structuredAudio)
 
             setLoading(false)
 

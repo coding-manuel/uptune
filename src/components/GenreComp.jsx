@@ -18,7 +18,7 @@ const StyledButton = ({genre}) => {
     )
 }
 
-const genresList = ['Rock', 'Jazz', 'Dubstep', 'Techno', 'Pop', 'Classical']
+const genresList = ['Hip-Hop', 'Dubstep', 'EDM', 'Pop', 'Hindi', 'Tamil', 'Metal']
 
 const GenreComp = ({label}) => {
     return (

@@ -47,8 +47,8 @@ export const audioChildren = (file) => (
     </Group>
 )
 
-const moods = ['Happy', 'Exuberant', 'Energetic', 'Frantic', 'Sad', 'Calm', 'Content']
-const genresList = ['Rock', 'Jazz', 'Dubstep', 'Techno', 'Pop', 'Classical']
+const moods = ['Happy', 'Exuberant', 'Energetic', 'Party', 'Commute', 'Chill', 'Romance']
+const genresList = ['Hip-Hop', 'Dubstep', 'EDM', 'Pop', 'Hindi', 'Tamil', 'Metal']
 
 export default function Upload() {
     const {uploadAudio, currentAccount, loading, loadingStatus, getArtist, artistExist, artist} = useContext(UptuneContext)
