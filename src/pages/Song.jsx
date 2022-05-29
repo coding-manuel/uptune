@@ -50,6 +50,10 @@ export default function Song() {
         navigate(`/artist/${songInfo.wallet}`)
     }
 
+    const handleTagClick = (genre) => {
+        navigate(`/genre/${genre.toLowerCase()}`)
+    }
+
     useEffect(()=>{
         setMainLoader(true)
         async function fetchSongs() {
@@ -84,7 +88,7 @@ export default function Song() {
                     <Title sx={{color: 'inherit'}} order={4}>{songInfo.title}</Title>
                     <Text size='md' onClick={handleArtistClick} variant="link" weight={500} sx={{cursor: 'pointer', paddingRight: 15, whiteSpace: 'noWrap', overflow: 'hidden',  textOverflow: 'ellipsis', color: 'inherit'}}>{songInfo.mainArtist}{songInfo.supportArtist != [] && ', ' + songInfo.supportArtist}</Text>
                     <Group pt={24}>
-                        {songInfo && songInfo.genres.map((genre) => <Badge variant='outline' sx={{cursor: 'pointer'}}>{genre}</Badge>)}
+                        {songInfo && songInfo.genres.map((genre) => <Badge onClick={() => handleTagClick(genre)} variant='outline' sx={{cursor: 'pointer'}}>{genre}</Badge>)}
                     </Group>
                 </Stack>
             </Group>

@@ -1,6 +1,7 @@
 import { useEffect, useState, useContext } from 'react';
 import { Route, Routes } from 'react-router-dom';
 import { MantineProvider, ColorSchemeProvider } from '@mantine/core';
+import { NotificationsProvider } from '@mantine/notifications';
 import { useLocalStorage } from '@mantine/hooks';
 
 import { changeFavicon } from './utils/faviconChange';
@@ -61,17 +62,19 @@ function App() {
   return (
     <ColorSchemeProvider colorScheme={colorScheme} toggleColorScheme={toggleColorScheme}>
       <MantineProvider theme={theme} styles={{ Title: { root: { color: "#ffffff"} } }} withGlobalStyles withNormalizeCSS>
-        <Layout>
-          <CommentDrawer songData={song} />
-          <TipModal />
-          <Routes>
-            <Route path='home' element={<Home />} />
-            <Route path='upload' element={<Upload />} />
-            <Route path='artist/:id' element={<Artist />} />
-            <Route path='song/:id' element={<Song />} />
-            <Route path='genre/:genre' element={<Genre />} />
-          </Routes>
-        </Layout>
+        <NotificationsProvider>
+          <Layout>
+            <CommentDrawer songData={song} />
+            <TipModal />
+            <Routes>
+              <Route path='home' element={<Home />} />
+              <Route path='upload' element={<Upload />} />
+              <Route path='artist/:id' element={<Artist />} />
+              <Route path='song/:id' element={<Song />} />
+              <Route path='genre/:genre' element={<Genre />} />
+            </Routes>
+          </Layout>
+        </NotificationsProvider>
       </MantineProvider>
     </ColorSchemeProvider>
   );

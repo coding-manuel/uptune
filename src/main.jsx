@@ -1,6 +1,5 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import { NotificationsProvider } from '@mantine/notifications';
 import { BrowserRouter } from "react-router-dom";
 import TimeAgo from 'javascript-time-ago'
 
@@ -18,9 +17,7 @@ ReactDOM.createRoot(document.getElementById('root')).render(
   <BrowserRouter>
     <UptuneProvider>
       <MusicProvider>
-          <NotificationsProvider>
             <App />
-          </NotificationsProvider>
       </MusicProvider>
     </UptuneProvider>
   </BrowserRouter>
