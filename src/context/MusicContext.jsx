@@ -1,6 +1,19 @@
 import React, {useEffect, useState, useContext} from "react"
 import { UptuneContext } from "./UptuneContext";
 
+function shuffle(array) {
+    return array.sort(() => Math.random() - 0.5);
+}
+
+function shuffleObject(obj) {
+    Object.keys(obj).forEach(function(key) {
+        console.log(obj[key])
+        obj[key] = obj[key].sort(() => Math.random() - 0.5);
+    });
+
+    return obj
+}
+
 export const MusicContext = React.createContext()
 
 export const MusicProvider = ({children}) => {
@@ -50,6 +63,11 @@ export const MusicProvider = ({children}) => {
                 }
 
             })
+
+            mostTippedSongs = shuffle(mostTippedSongs)
+            genreListSongs = shuffleObject(genreListSongs)
+            moodListSongs = shuffleObject(moodListSongs)
+
             setMostTipped(mostTippedSongs)
             setGenreList(genreListSongs)
             setMoodList(moodListSongs)

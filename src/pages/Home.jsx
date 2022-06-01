@@ -15,11 +15,12 @@ export default function Home() {
   const [mostTippedList, setMostTippedList] = useState([]);
   const [moodSongList, setMoodSongList] = useState({});
 
-  useState(() => {
+  useEffect(() => {
     setMoodSongList(moodList)
+    console.log(moodList)
   }, [moodList])
 
-  useState(() => {
+  useEffect(() => {
     setMostTippedList(mostTipped)
   }, [mostTipped])
 
@@ -40,7 +41,9 @@ export default function Home() {
       <LoadingOverlay visible={loading} />
       {!loading && <SwiperComp label="Most Tipped" songs={mostTipped} />}
       {!loading && <SwiperComp label="Fuel your energy" songs={moodList['Energetic']} />}
-      {!loading && <SwiperComp label="Feelng Happy" songs={moodList['Happy']} />}
+      {!loading && <SwiperComp label="Workout Motivation" songs={moodList['Gym']} />}
+      {!loading && <SwiperComp label="Party Vibe" songs={moodList['Party']} />}
+      {!loading && <SwiperComp label="Feel the love" songs={moodList['Romance']} />}
       {!loading && <GenreComp label="Browse by Genre" />}
     </>
   )
