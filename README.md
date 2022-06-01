@@ -1,23 +1,41 @@
-# quickbuck
+<div align="center">
+ <img src='https://user-images.githubusercontent.com/53911108/171328517-58e4c1c8-e240-4d17-81b5-a0d4567665ba.png' />
+</div>
 
-**Quickbuck** is a fast, safe, and easy to use app that allows you to transfer ethereum from one account to another. Simply enter the amount of ethereum you want to transfer, the address of the recipient, and confirm the transaction.
+# Uptune
 
-<img src="images/home.jpg" alt="home" >
+Looking for a new, decentralised music streaming app? Look no further than **Uptune**! With Uptune, you can upload your own music and listen to it whenever you want, without having to worry about centralised servers. Plus, you can be sure that your music is always available, even if the app goes down – because there is no centralised server, there is no single point of failure.
+
+<img src="images/Home.jpg" alt="home" >
 
 ## Description
 
-Ethereum is a decentralized platform that runs smart contracts: applications that run exactly as programmed without any possibility of fraud or third party interference.
+This app is made to understand how IPFS works and how it can be used to make a DAPP(Decentralized Application). It makes use of Web3.Storage for IPFS and hardhat's local test network for the testing. The app allows users to create an artist and upload music to it. It gets stored on the blockchain and can get recommended on the home page. The users can get paid by their audience who can tip them and also send in messages.
 
-Ethereum is a public blockchain-based platform that utilizes the cryptocurrency Ether for fuel. It is an open source project created by Vitalik Buterin in 2014.
+## Features
 
-The app would be used to transfer ethereum from one account to another. The app would be similar to other cryptocurrency wallets, but would be specific to ethereum. The user would need to input their account information, as well as the account they wish to send the ethereum to. The user would also need to input the amount of ethereum they wish to send. Once all of the information is inputted, the user would simply need to hit the “send now” button and the ethereum would be transferred from their account to the other account.
+- The app would allow users to upload and share their music with others on the network
 
+- The app would be decentralized, meaning that there would be no central server or authority
+
+- The app would use blockchain technology to ensure the security and integrity of the network
+
+- The app would be open source, meaning that anyone would be able to contribute to its development
+
+- People can tip the artists using the inbuilt payment options
+
+<img src="images/Upload.jpg" alt="home" >
+
+<img src="images/Artist.jpg" alt="home" >
+                                     
 ## Getting Started
 
 ### Dependencies
 
 * [React.js](https://reactjs.org/) - v18.0.0
 * [Mantine](https://mantine.dev/) - v4.2.2
+* [Web3.storage](https://web3.storage/) - v4.2.0
+* [Swiper](https://swiperjs.com/) - v8.1.4
 
  ### Dev Dependancies
  
