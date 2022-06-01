@@ -6,6 +6,7 @@ import { useNavigate, useParams } from 'react-router-dom'
 import { MusicContext } from '../context/MusicContext';
 import { UptuneContext } from "../context/UptuneContext"
 import { showNotification } from '@mantine/notifications';
+import SwiperComp from '../components/SwiperComp';
 
 const IconButton = ({ type }) => {
     return(
@@ -30,11 +31,12 @@ const IconButton = ({ type }) => {
 
 export default function Song() {
     const navigate = useNavigate()
-    const {setSongData} = useContext(MusicContext)
+    const {setSongData, genreList} = useContext(MusicContext)
     const {getOneAudio, setMainLoader} = useContext(UptuneContext);
     const {id} = useParams()
 
     const [songInfo, setSongInfo] = useState(false);
+    const [localGenreList, setLocalGenreList] = useState({});
 
     const handleShare = () => {
         const shareLink = `http://localhost:3000/song/${id}`
@@ -68,6 +70,10 @@ export default function Song() {
         fetchSongs()
       }, [])
 
+    useEffect(() => {
+        setLocalGenreList(genreList)
+    }, [genreList])
+
 
     return (
     <Stack>
@@ -93,6 +99,7 @@ export default function Song() {
                 </Stack>
             </Group>
         </MediaQuery>
+        {songInfo && <SwiperComp label="More like this" songs={localGenreList[songInfo.genres[0].toLowerCase()]} />}
     </Stack>
     )
 }
