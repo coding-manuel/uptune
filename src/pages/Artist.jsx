@@ -33,9 +33,10 @@ export default function Artist() {
   return (
     <>
       <Box sx={{position: 'relative', marginBottom: 16}}>
-        <Box sx={{height: 'clamp(120px, 30vw, 240px); ', borderRadius: 4, backgroundSize: 'cover', backgroundPosition: 'center', backgroundImage: `url(${artistData.profilegateway})`}}></Box>
+        <Box sx={{height: 'clamp(120px, 50vw, 400px); ', borderRadius: 4, backgroundSize: 'cover', backgroundPosition: 'center', backgroundImage: `url(${artistData.profilegateway})`}}></Box>
         <Overlay
-          gradient={'linear-gradient(180deg, rgba(0,0,0,0.13070738549325978) 12%, rgba(0,0,0,0.7749650885744923) 94%)'}
+          sx={{opacity: 1}}
+          gradient={'linear-gradient(180deg, #00000049 12%, #141517 90%)'}
         />
         <Title sx={{zIndex: 900, position: 'absolute', bottom: 0}} p={12} order={4}>{artistData.artistName}</Title>
       </Box>
